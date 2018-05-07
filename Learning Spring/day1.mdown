@@ -1,0 +1,135 @@
+## IoC Service Provider
+
+- `被注入对象`需要什么，`IoC Service Provider`就会将相应的`被依赖对象`注入到`被注入对象`
+
+## 三种依赖注意的方式
+
+- 构造方法注入
+
+> 构造方法中声明依赖对象的参数列表
+
+- setter方法注入
+
+> 为其依赖的对象添加setter方法
+
+- 接口注入
+
+> 必须实现某个接口，接口提供一个方法，用来为其注入依赖对象
+
+## 三种方式的比较
+
+- 接口注入基本不用
+- 构造方法注入
+	- 优点：对象构造完成后，就进入就绪状态，可以马上使用
+	- 缺点：
+		- 依赖对象较多时，参数列表比较长
+		- 通过反射构造对象时，对于相同类型的参数处理会比较困难，维护使用也很麻烦
+		- 对于非必需的依赖处理，可能需要引入多个构造方法，造成维护上的不便
+- setter方法注入
+	- 优点：
+		- 描述性更优
+		- 可以被继承，允许设置默认值，而且有良好的IDE支持
+	- 缺点：
+		- 对象无法在构造完成后马上进入就绪状态
+
+## IoC Service Provider的职责
+
+- 业务对象的`构建`和`管理`
+- 业务对象间的`依赖绑定`
+
+> Ioc Service Provider如何知道被注入对象和依赖对象之间的关系，或者说如何记录对象之间的关系？
+
+## Ioc Service Provider注册对象管理信息的方式
+
+- 直接编码方式
+
+```java
+IoContainer container = ...;
+container.register(FXNewsProvider.class, new FXNewsProvider());
+container.register(IFXNewsListener.class, new DowJonesNewsListerner());
+...
+FXNewsProvider newsProvider = container.get(FXNewsProvider.class);
+newsProvider.getAndPersistNews();
+```
+
+> 直接编码方式管理基于接口注入的依赖注入关系
+
+```java
+IoContainer container = ...;
+container.register(FXNewsProvider.class, new FXNewsProvider());
+container.register(IFXNewsListener.class, new DowJonesNewsListerner());
+...
+container.bind(IFXNewsListenerCallable.class, container.get(IFXNewsListener.class));
+...
+FXNewsProvider newsProvider = container.get(FXNewsProvider.class);
+newsProvider.getAndPersistNews();
+```
+
+- 配置文件方式
+- 元数据方式（注解）
+
+## Spring提供两种容器类型
+
+- BeanFactory
+
+> 基础类型IoC容器，提供完善的IoC服务支持。
+> 默认采用延迟初始化策略（lazy-load）
+
+- ApplicationContext
+
+> 在BeanFactory基础上构建，额外提供其他高级特性
+> 在容器启动后，所管理的对象默认全部初始化并绑定完成
+
+## BeanFactory的对象注册与依赖绑定方式
+
+- 直接编码方式 （BeanDefinition, BeanFactory, BeanDefinitionRegistry）
+	- 构造BeanDefinition
+	- 注册BeanDefinition到容器中
+	- 依赖关系的绑定
+		- 构造方法注入
+		- setter方法注入
+
+- 外部配置文件方式
+	- 支持两种文件格式：Properties文件格式和XML文件格式
+	- BeanDefinitionReader实现类负责
+		- 将相应的配置文件内容映射到BeanDefinition
+		- 将映射后的BeanDefinition注册到一个BeanDefinitionRegistry中
+		- BeanDefinitionRegistry完成bean的注册与加载
+
+- 注解方式
+	- @Autowired：告知Spring容器需要为当前对象注入哪些依赖对象
+	- @Component：配合classpath-scanning功能使用
+	- 向Spring的配置文件中增加一个“触发器”，使用以上两个标注的类就能或的依赖对象的注入：启用`componet-scan`：识别@Component (@Configuration也是一种@Component)，注册为Bean
+
+```xml
+<context:component-scan base-package="com.fz.beanfactorydemo" />
+```
+
+- JavaConfig
+	- @Configuration：@Configuration类本身会被注册为一个Bean (因为它也是一种@component)，在这个类中所有用@Bean注解的方法都会被定义为一个Bean（在@Component标注的类中也可以使用@Bean）
+	- @Bean注解方法可以具有`描述构建该bean所需依赖关系的任意数量的参数`
+	- 也能启用component-scan
+
+```java
+@Configuration
+@ComponentScan(basePackages = "com.fz.beanfactory.demo")
+public class AppConfig {
+	@Bean
+    public TransferService transferService(AccountRepository accountRepository) {
+        return new TransferServiceImpl(accountRepository);
+    }
+    // other beans
+}
+```
+
+- @Component - General purpose annotation, can be used as a replacement for above annotations.
+	- @Repository - Used to mark a bean as DAO Component on persistence layer
+	- @Service - Used to mark a bean as Service Component on business layer
+	- @Controller - Used to mark a bean as Controller Component on Presentation layer
+	- @Configuration - Used to mark a bean as Configuration Component.
+
+## @Bean
+
+- @Scope：@Scope("prototype")和@Scope("singleton")，默认是单例
+- name：@Bean(name = "myBean")或者@Bean(name = {"myBean", "myBean2"})
+- @Description("Provides a basic example of a bean")

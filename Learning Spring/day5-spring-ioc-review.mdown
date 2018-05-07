@@ -1,0 +1,517 @@
+[TOC]
+
+## Ioc Service Provider
+
+### 1. 概述
+
+`被注入对象`需要什么，`Ioc Service Provider` 就会将相应的`被依赖对象`注入到`被注入对象`
+
+### 2. 三种依赖注入的方式
+
+- 构造方法注入
+- setter 方法注入
+- 接口注入
+
+> setter 方法注入可以一定程度上避免循环依赖
+
+## Spring IoC 容器
+
+### BeanFactory
+
+#### 1. 概述
+
+- 基础类型 IoC 容器，提供完善的 IoC服务支持
+- 默认采用延迟初始化策略
+
+#### 2. 对象注册与依赖绑定方式
+
+##### 2.1 直接编码方式
+
+- 创建 `BeanDefinition`
+- 使用 `BeanDefinitionRegistry` 注册创建的 BeanDefinition
+- 为 BeanDefinition 指定依赖关系
+	- `setConstructorArgumentValues`
+	- `setPropertyValues`
+- `BeanFactory` 根据 BeanDefinition 中保存的对象的信息为客户端返回一个完备可用的对象实例
+
+##### 2.2 外部配置文件方式
+
+- 根据不同格式的外部配置文件，由 `BeanDefinitionReader` 相应的实现类负责读取配置文件内容，并创建 BeanDefinition
+- 将创建的 BeanDefinition 注册到 BeanDefinitionRegistry 中
+
+##### 2.3 注解
+
+- `@Autowired` 告诉 Spring 要为当前对象注入哪些依赖对象
+	- 按照类型匹配进行依赖注入，类似于 XML 配置中的 byType
+	- 可以标注于类定义的多个位置
+		- 属性
+		- 构造方法：类似与 constructor
+		- 方法
+- `@Qualifier` byName 自动绑定的注解版
+- `@Component` 告诉 Spring 当前类需要被添加到容器中进行管理
+- `<context:component-scan>` 告诉 Spring 到指定的包下面扫描标注有 @Component 的类
+- JSR250
+
+```xml
+<context:component-scan base-package="com.fz.demo">
+```
+
+__标注的实现原理 BeanPostProcessor__
+
+- 添加 `<bean class="...AutowiredAnnotationBeanPostProcessor" />` 来支持标注功能
+- 添加 `<bean class="...CommonAnnotationBeanPostProcessor" />` 来支持 JSR250 标注功能
+- 添加 `<context:annotation-config />` 可以搞定以上所有 BeanPostProcessor 配置
+	- PersistenceAnnotationBeanPostProcessor
+	- RequiredAnnotationBeanPostProcessor
+- 添加 `<context:component-scan>` 可以搞定上述两个 BeanPostProcessor 配置
+
+##### 2.4 JavaConfig
+
+#### 3. XML 配置详解
+
+##### 3.1 `<beans>`
+
+- default-lazy-init: true, false
+- default-autowire: no, byName, byType, constructor, autodetect (现已被废弃)
+- default-dependecy-check: none, simple, object, all
+- default-init-method:
+- default-destroy-method:
+
+##### 3.2 dependency-check 介绍
+
+- bean 被创建时，默认情况下，Spring 对于其属性`是否已被初始化`是不做检查的，如果需要对属性的初始化情况进行检查，在 Spring 2.x 中通过使用 dependency-check 设定
+- 可选值
+	- none: 不做检查
+	- simple: 只检查简单类型以及集合类型属性
+	- object: 检查除简单类型以及集合类型以外的引用类型属性
+	- all: 检查所有类型
+- Spring 3.0 的替代方案
+	- 只使用构造方法注入（而不是setter方法注入）来保存特定的属性已被初始化
+	- 用 `@Required` 标注 setter 方法
+		- 仅仅使用 @Required 标注是不起作用的，你需要添加 `RequiredAnnotationBeanPostProcessor` 到容器中
+			- 添加 `<context:annotation-config />` 或者
+			- 添加 `<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>`
+	- 用 `init-method` 检查特定的属性是否被初始化
+	- 用 `@Autowired(required = false or true)`
+
+##### 3.3 `<bean>`
+
+- id
+	- 指定 `beanName`
+- name
+	- 指定别名
+- class
+	- 指定类型
+- depends-on
+	- 没有明确指定对象A的依赖于对象B，通过depends-on通知容器在实例化对象A之前首先实例化对象B
+- autowire
+- dependency-check
+- lazy-init
+
+##### 3.4 `<constructor-arg>`
+
+- type
+	- 指定参数的类型
+- index
+	- 指定参数的顺序
+- name
+
+##### 3.5 `<property>`
+
+- name
+	- 指定属性名称
+
+##### 3.6 `<constructor-arg>` 和 `<property>` 中可用的配置项
+
+- value
+	- 为对象注入简单的数据类型（包括 `String 类型` 和 原始类型的`包装器`，如 Integer）
+- ref
+	- 用来引用容器中其他的对象实例
+	- local
+		- 只能指定与当前配置的对象在同一个配置文件中的对象引用
+	- parent
+		- 只能指定位于当前容器的父容器中定义的对象引用
+	- bean
+		- 不限制定义的位置
+- idref
+	- 为当前对象注入所依赖对象的名称`而不是引用`
+- bean
+	- 内部 bean，只能被当前对象引用
+- list
+	- 注入对象类型为 `java.util.List` 及其子类或者`数组类型`的依赖对象
+- set
+	- 注入对象类型为 `java.util.Set` 及其子类的依赖对象
+- map
+	- entry
+		- key / key-ref
+		- value / value-ref
+- props
+	- 简化后的 <map>
+	- 只能指定 String 类型的键和值
+	- <prop>
+		- key
+- null
+	- 空元素
+
+##### 3.7 bean 的继承
+
+- parent
+- abstract
+	- `abstract` 为 true，说明这个 bean 定义不需要被初始化，这个 bean 也就不需要指定 class
+
+##### 3.8 bean 的 scope
+
+- scope 用来声明容器中的对象所应该处的`限定场景`或者`对象的存活时间`，即容器在对象进入其相应的 scope 之前，生成并装配这些对象，在该对象不再处于这些 scope 限定后，容器通常会销毁这些对象
+
+##### __3.9 自定义 scope 类型__
+
+- 自定义一个 Scope 接口的实现类
+- 将自定义Scope 注册到容器中
+
+注册自定义 Scope 的方法：
+
+- ConfigurableBeanFactory.registerScope(String scopeName, Scope scope)
+- Spring 提供一个专门用于统一注册自定义scope 的 `BeanFactoryPostProcessor` 实现，即 `CustomScopeConfigurer`
+- ApplicatonContext 能够`自动识别并加载` BeanFactoryPostProcessor，所以我们就可以直接在配置文件中，通过 CustomScopeConfigurer 来注册 自定义的 Scope 实现类
+
+__Example：__
+
+```xml
+<bean class="...CustomScopeConfigurer">
+	<property name="scopes">
+		<entry name="customScopeName" ref="...CustomScopeImpl"
+	</property>
+</bean>
+```
+
+##### 3.10 工厂方法
+
+- 静态工厂方法
+	- class 指定工厂方法类
+	- `factory-method` 指定具体的工厂方法
+	- constructor-arg 指定工厂方法的参数
+
+
+```xml
+<bean id="..." class="...FactoryClass" factory-method="factoryMethodInFactoryClass">
+	<constructor-arg index="0" ref="..." />
+</bean>
+```
+
+- 非静态工厂方法
+	- `factory-bean` 指定非静态工厂对象实例
+	- factory-method 指定具体的工厂方法
+	- constructor-arg 指定工厂方法的参数
+
+```xml
+<bean id="nonStaticFactory" class="...NonStaticFactoryClass" />
+
+<bean id="..." factory-bean="nonStaticFactory" factory-method="...factoryMethodInFactoryClass">
+	<constructor-arg index="0" ref="..." />
+</bean>
+```
+
+##### __3.11 自定义 FactoryBean__
+
+概述:
+- `FactoryBean` 是 Spring 提供的可以扩展容器对象实例化逻辑的接口
+- 首先是一个 Bean，然后是一个可以生产对象的工厂
+
+步骤：
+- 自定义一个 FactoryBean 的实现类
+- 将自定义的 FactoryBean 注册到容器中
+- 使用这个 FactoryBean
+
+__Example:__
+
+```xml
+<bean id="customFactoryBean" class="...CustomFactoryBean" />
+
+<bean id="..." class="...">
+	<property name="..." ref="customFactoryBean" />
+</bean>
+```
+
+> 自定义 FactoryBean 的类型是 FactoryBean，但是通过 id 引用，容器返回的是 FactoryBean 所生产的对象类型
+
+> 如果一定要取得 FactoryBean 本身，可以通过在 bean 定义的 id 之前加上前缀 `&` 来达到目的
+
+##### __3.12 方法注入__
+
+概述：
+- 方法被调用的时候，每次返回指定类型的对象实例
+
+__解决问题：__
+- 每次调用都让容器返回新的对象实例
+
+步骤：
+- 方法声明须符合规定
+	- `<public | protected> [abstract] <return-type> theMethodName(no-arguments)`, 即方法必须能够被子类实现或者重写，因为方法注入的`实现原理`是容器为我们要进行方法注入的对象`使用 Cglib 动态生成一个子类实现`，从而替代当前对象
+	- 添加 `lookup-method` 配置
+		- name 指定需要注入的方法名
+		- bean 指定需要注入的对象
+
+__Example:__
+
+```xml
+<bean id="newBean" class="..." scope="prototype" />
+
+<bean id="persistBean" class="...PersistBean">
+	<lookup-method name="getNewBean" bean="newBean" />
+</bean>
+```
+
+__使用 BeanFactoryAware 解决上述问题：__
+
+- 让 PersistBean 拥有一个 BeanFactory 的引用
+- Spring 提供 `BeanFactoryAware` 接口，容器在进行实例化实现了此接口的 bean 的过程中，会自动将容器自身注入该 bean
+
+__使用 ObjectFactoryCreatingFactoryBean 解决上述问题：__
+
+- `ObjectFactoryCreatingFactoryBean` 是 FactoryBean 的一个实现类，它返回一个 `ObjectFactory` 对象
+- 调用 ObjectFactory.getObject() 等价于 beanFactory.getBean(String beanName)，即可以返回一个 bean 的对象实例
+- ObjectFactoryCreatingFactoryBean 实现了 BeanFactoryAware 接口，所以它拥有一个 BeanFactory 对象引用，`targetBeanName` 是 ObjectFactoryCreatingFactoryBean 的一个属性，它指定了 ObjectFactory.getObject() 返回的 bean 的 beanName
+- 通过在配置文件中配置 ObjectFactoryCreatingFactoryBean 的 targetBeanName，ObjectFactoryCreatingFactoryBean 返回的 ObjectFactory 对象可以返回一个我们指定的类型的对象实例
+
+__Example:__
+
+```xml
+<bean id="newBean" class="..." scope="prototype" />
+
+<bean id="objectFactoryCreatingFactoryBean" class="...ObjectFactoryCreatingFactoryBean">
+	<property name="targetBeanName" idref="newBean" />
+</bean>
+
+<bean id="persistBean" class="...PersistBean" >
+	<property name="objectFactory" ref="objectFactoryCreatingFactoryBean" />
+</bean>
+```
+
+##### __3.13 方法替换__
+
+步骤：
+- 自定义一个 `MethodReplacer` 实现类
+- 注册这个自定义类
+	- replace-method
+		- name：指定需要被替换的方法名
+		- replacer：指定自定义 MethodReplacer 类的 bean 引用
+
+#### __4. Spring Ioc 容器的工作流程详解__
+
+##### 4.1 概述
+
+- 容器启动阶段
+	- 通过某种方式加载 Configuration MetaData
+	- 容器需要依赖某些工具类（BeanDefinitionReader）对加载的 Configuration MetaData 进行解析和分析，并将分析后的信息编组为相应的 BeanDefiniton
+	- 将 BeanDefinition 注册到相应的 BeanDefinitonRegistry
+
+- Bean 实例化阶段
+	- 容器会检查所请求的对象之前是否已经初始化
+	- 如果没有，会根据 BeanDefinition 所提供的信息实例化被请求对象，并为其注入依赖
+	- 如果该对象实现了某些回调接口，会根据回掉接口的要求来装配它
+	- 容器将对象返回给请求方使用
+
+##### __4.2 插手容器的启动__
+
+__容器扩展机制 BeanFactoryPostProcessor__
+
+- 该机制允许我们在容器`实例化相应对象之前`，对注册到容器的 BeanDefinition 所保存的信息做相应的修改
+- 这就相当于在容器启动阶段最后加入一道工序，让我们对最终的 BeanDefinition 做一些额外的操作
+
+__自定义 BeanFactoryPostProcessor__
+
+- 自定义一个实现了 BeanFactoryPostProcessor 接口的类
+- 因为一个容器可能拥有多个 BeanFactoryPostProcessor，这个时候可能需要实现类同时 `Ordered` 接口，以保证各个 BeanFactoryPostProcessor 可以按照预先设定的顺序执行
+
+__Spring 中存在的，常用的 BeanFactoryPostProcessor__
+
+_(1) PropertyPlaceholderConfigurer_
+
+- PropertyPlaceholderConfigurer 允许我们在 XML 配置文件中`使用占位符`，并将这些占位符所代表的资源单独配置到简单的 properties 文件中来加载
+
+- PropertyPlaceholderConfigurer 不单会从其配置的 properties 文件中加载配置项，同时还会检查 Java 的 System 类中的 Properties
+
+_(2) PropertyOverrideConfigurer_
+
+概述:
+
+- 对容器中的某些 bean 定义的 property 信息进行覆盖
+
+步骤：
+
+- 我们需要按照如下规则提供一个 PropertyOverrideConfigurer 使用的配置文件:
+	- `beanName.propertyName=value`
+- 在 XML 文件中配置 PropertyOverrideConfigurer
+
+> PropertyPlaceholderConfigurer 和 PropertyOverrideConfigurer 都继承了 PropertyResourceConfigurer，可以通过 `重写convertPropertyValue` 对相应的配置项进行转换，如`解密`
+
+_(3) CustomEditorConfigurer_
+
+背景：
+
+- XML 配置文件所记载的都是 String 类型的数据，最终应用程序却是由各种类型的对象所构成
+- 要想完成这种由字符串到具体对象的转换，都需要这种转换规则相关的信息
+- CustomEditorConfigurer 就是帮助我们`传达类似信息`的
+
+__自定义 `PropertyEditor`:__
+
+- 自定义一个 PropertyEditor 接口的实现类（可以继承 `PropertyEditorSupport`）
+- 通过 CustomEditorConfigurer 注册自定义个 PropertyEditor 实现类
+- Spring 2.0以后，通常使用 `propertyEditorRegistrars` 而不是 `customEditors` 属性来指定自定义的 PropertyEditor
+
+```xml
+<bean id="customPropertyEditor" class="...CustomPropertyEditor">
+	...
+</bean>
+
+<bean class="...CustomEditorConfigurer">
+	<property name="customEditors">
+		<map>
+			<entry key="java.util.Date"> <!-- key 是对象类型 -->
+				<ref bean="customPropertyEditor" />
+			</entry>
+		</map>
+	</property>
+</bean>
+```
+
+```xml
+<bean id="customPropertyEditor" class="...CustomPropertyEditor">
+	<!-- property -->
+</bean>
+
+<bean id="customPropertyEditorRegistrar" class="...CustomPropertyEditorRegistrar">
+	<property name="propertyEditor">
+		<ref bean="customPropertyEditor" />
+	</property>
+</bean>
+
+<bean class="...CustomEditorConfigurer">
+	<property name="propertyEditorRegistrars">
+		<list>
+			<ref bean="customPropertyEditorRegistrar" />
+		</list>
+	</property>
+</bean>
+```
+
+__在 BeanFactory 和 ApplicationContext 中应用 BeanFactoryPostProcessor__
+
+- 在 BeanFactory 中，我们需要用手动方式应用所有的 BeanFactoryPostProcessor
+- ApplicationContext 能够自动识别配置文件中的 BeanFactoryPostProcessor，因此只需在 XML 配置文件中将 BeanFactoryPostProcessor 配置即可
+
+```xml
+<context:property-placeholder location=""/>
+```
+
+##### __4.3 Bean 实例化阶段__
+
+_(1) 实例化过程_
+
+- 实例化 bean 对象
+- 设置对象属性
+- 检查 Aware 相关接口并设置相关依赖
+- BeanPostProcessor 前置处理
+- 检查是否是 InitializingBean 以决定是否调用 afterPropertySet 方法
+- 检查是否配置有自定义的 init-method
+- BeanPostProcessor 后置处理
+- 注册必要的 Destruction 相关回调接口
+- 使用中
+- 是否实现 DisposableBean 接口
+- 是否配置有自定义的 destroy-method 方法
+
+_(2) Bean 的实例化_
+
+- 容器内部采用 `策略模式` 来决定采用何种方式初始化 bean 实例
+- `InstantiationStrategy` 接口定义了实例化策略的抽象接口
+- `SimpleInstantiationStrategy` 实现了简单的对象实例化功能，可以通过 `反射` 来实例化对象，但不支持方法注入方式的对象实例化
+- `CglibSubClassingInstantiationStrategy` 继承了 SimpleInstantiationStrategy 的以反射方式实例化对象的功能，并且通过 `CGLIB 的动态字节码生成功能` 可以动态生成某个类的子类，进而满足了方法注入所需的对象实例化需求
+- 默认情况下，容器内部采用 CglibSubClassingInstantiationStrategy
+- InstantiationStrategy `返回的不是构造完成的对象实例，而是 BeanWrapper 实例`
+- 通过 BeanWrapper （Spring 提供 `BeanWrapperImpl` 实现） 实例设置对象属性
+
+_(3) Aware 接口_
+
+- BeanNameAware
+- BeanClassLoaderAware
+- BeanFactoryAware
+- ResourceLoaderAware
+- ApplicationEventPublisherAware
+- MessageSourceAware
+- ApplicationContextAware
+
+> Aware 接口主要用于注入依赖
+
+__(4) BeanPostProcessor__
+
+__BeanPostProcessor 使用场景__
+
+- 处理标记接口实现类
+- 为当前对象提供代理实现 （Spring AOP）
+
+__自定义 BeanPostProcessor__
+
+- 标注实现类
+	- 创建标记接口
+	- 实现类实现该标记接口
+
+- 自定义一个 BeanPostProcessor 实现类，对符合条件的 bean 实例进行处理
+- 将自定义的 BeanPostProcessor 注册到容器中
+
+_(5) InitializingBean 和 init-method_
+
+_(6) DisposableBean 和 destroy-method_
+
+__如何才能触发__
+
+- 对于 BeanFactory 来说，需要调用 `ConfigurableBeanFactory` 提供的 `destroySingletons()` 方法销毁容器中管理的所有 singleton 类型的对象实例
+- 对于 ApplicationContext 来说，`AbstractApplicaionContext` 提供了 `registerShutdownHook()` 方法
+
+### ApplicationContext
+
+#### 1. 统一的资源加载
+
+##### 1.1 Resource
+
+- ByteArrayResource
+- ClassPathResource
+- FileSystemResource
+- UrlResource
+- InputStreamResource
+
+##### 1.2 定位和查找资源的 ResourceLoader
+
+__可用的 ResourceLoader__
+
+- DefaultResourceLoader
+- FileSystemResourceLoader
+- ResourcePatternResolver
+	- 常用实现类 PathMatchingResourcePatternResolver
+
+##### 1.3 ApplicationContext 与 ResourceLoader
+
+- ApplicationContext 的实现类`完全可以支持` ResourceLoader 和 ResourcePatternResolver 接口，其功能`完全委派`给 DefaultResourceLoader 和 PathMatchingResourcePatternResolver
+
+- 可以通过实现 ResourceLoaderAware 接口注入 ResourceLoader 的依赖
+
+- ApplicationContext 容器可以正确识别 Resource 类型并转换后注入相关对象
+
+__实现原理__
+
+> ApplicationContext 在启动的时候，会通过 `ResourceEditorRegistrar` 来注册 Spring 提供的针对 Resource 类型的 PropertyEditor （ResourceEditor） 实现到容器中
+
+#### 2. 国际化信息支持
+
+##### 2.1 MessageSource
+
+#### 3. 容器内部事件发布
+
+##### 3.1 ApplicationEvent
+
+- ContextClosedEvent：ApplicationContext 容器在即将关闭时发布的事件类型
+- ContextRefreshEvent：ApplicationContext 容器在初始化或者刷新的时候发布的事件类型
+- RequestHandledEvent：Web 请求处理后发出的事件类型
+
+##### 3.2 ApplicationListener
+
+##### 3.3 ApplicationEventPublisher

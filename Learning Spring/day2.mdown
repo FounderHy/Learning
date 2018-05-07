@@ -1,0 +1,288 @@
+## </beans> 属性
+
+- default-lazy-init：true，false，默认false。用来标志是否对所有的</bean> 延迟初始化
+- default-autowire：no，byName，byType，constructor，autodetect，默认为no。
+- default-dependency-check：none，objects，simple，all，默认为none。
+- default-init-method：对又有</bean>指定同样的初始化方法。
+- default-destroy-method：对又有</bean>指定同样的对象销毁方法。
+
+## </bean> 属性
+
+- id属性
+
+> 通过id指定beanName
+> 使用name来指定bean的别名，可以通过逗号，空格或冒号分割指定多个name
+
+- class属性
+
+> 指定bean的类型
+
+## 构造方法注入的XML配置
+
+- </constructor-arg>
+
+> 通过type指定参数类型
+> 通过index指定参数顺序
+
+```xml
+<bean id="bookService" class="..BookService">
+	<constructor-arg ref="bookSearchService"/>
+	<constructor-arg value="1111" />
+</bean>
+```
+
+## setter方法注入的XML配置
+
+- </property>
+
+> 用name指定属性名
+
+```xml
+<bean id="bookService" class="..BookService">
+	<property name="bookSearchService" ref="bookSearchService"/>
+	<property name="admin" value="1111" />
+</bean>
+```
+
+> </constructor-arg>和</property>可以混合使用
+
+- depends-on
+- autowire：定义当前bean采用某种类型的自动绑定模式。这样，你就无需手工明确指定该bean相关的依赖关系。
+
+> byName和byType类型的自动绑定模式是针对property的自动绑定
+> constructor类型与byType类似，只是一个需要使用构造函数，一个需要使用setter函数
+> autodetect是byType和constructor模式的结合体，优先使用byType
+> 自动绑定只应用与“原生类型，String类型和Classes类型以外”的对象类型
+
+- lazy-init
+
+> lazy-init设置为true也不能保证这个bean一定是延迟初始化，例如它被一个非延迟初始化的bean依赖
+
+## <constructor-arg>和</property>中可用的配置项
+
+- <value>为主体对象注入简单数据类型（包括String类型和包装器类型）
+- <ref>引用容器中的其他实例对象
+	- local
+	- parent
+	- bean
+- <idref>为当前对象注入`所依赖的对象的名称`，而不是引用
+- 内部<bean>的id不是必须的，只有外部<bean>可以引用它
+- <list>注入对象类型为java.util.List及其子类或者数组类型的依赖对象
+- <set>
+- <map>
+	- key: key，key-ref
+	- value：value，value-ref，ref，……
+- <props>java.util.Properties，只能指定String类型的键和值
+- </null>
+
+```xml
+<property name="mapping">
+	<map>
+		<entry key="key1">
+			<value>1111</value>
+		</entry>
+		<entry>
+			<key>key2</key>
+			<ref bean="someObject">
+		</entry>
+		<entry>
+			<list>
+				...
+			</list>
+		</entry>
+	</map>
+</property>
+```
+
+## bean的继承
+
+- parent属性：当前bean通过设置`parent属性`来继承父bean的默认配置，只需将特定的属性进行更改
+- abstract属性：abstract属性为true的bean不会被实例化，专门用来给其他bean继承使用，`不需要设置class属性`
+
+## bean scope 对象的生命周期管理
+
+> scope用来声明容器中的对象所应该处的`限定场景`或者说该对象的`存活时间`
+> 容器在对象进入其相应的scope之前，生成并装配这些对象，在该对象不再处于这些scope的限定后，容器通常会销毁这些对象
+
+- singleton：默认scope
+
+> 拥有singleton scope的bean，在Spring的IoC容器中只存在一个实例
+> 几乎与IoC容器拥有相同的寿命
+
+- prototype
+
+> 容器在接到该类型对象的请求时，每次都会重新创建一个新的对象实例给请求方
+> 请求方自己负责当前返回对象后续的生命周期的管理工作
+
+## 自定义scope类型
+
+> request, session, globalSession都是自定义scope类型
+
+- 创建一个自定义Scope类，需要实现org.springframework.beans.factory.config.Scope接口
+- 向容器中注册这个Scope类
+	- ConfigurableBeanFactory.registerScope(scopeName, scope)
+	- Spring提供的专门用于统一注册自定义Scope的BeanFactoryPostProcessor：CustomScopeConfigurer
+
+> 对于ApplicationContext来说，它可以自动识别并加载BeanFactoryPostProcessor，所以我们可以在文件中通过CustomScopeConfigurer来注册自定义Scope
+
+```xml
+<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+	<property name="scopes">
+		<map>
+			<entry key="thread", value="com.foo.ThreadScope"/>
+		</map>
+	</property>
+</bean>
+```
+
+## 工厂方法与FactoryBean
+
+- 静态工厂方法
+
+> 将工厂方法里面实例化的对象注入到被注入对象中
+
+```xml
+<bean name="bookService" class="...BookService">
+	<property name="bookSearchService">
+		<ref name="bookSearchService">
+	</property>
+</bean>
+
+<bean id="bookSearchService" class="...ServiceFactory" factory-method="getBookSearchService"/>
+```
+
+> 当工厂方法需要传入参数时，使用<constructor-arg>
+
+```xml
+<bean name="bookService" class="...BookService">
+	<property name="bookSearchService">
+		<ref name="bookSearchService">
+	</property>
+</bean>
+
+<bean id="bookSearchService" class="...StaticServiceFactory" factory-method="getBookSearchService">
+	<constructor-arg>
+		<ref name="userConfig"/>
+	</constructor-arg>
+</bean>
+
+<bean name="userConfig" class="...UserConfig">
+```
+
+- 非静态工厂方法
+
+```xml
+<bean name="bookService" class="...BookService">
+	<property name="bookSearchService">
+		<ref name="bookSearchService">
+	</property>
+</bean>
+
+<bean id="nonStaticServiceFactory" class="...NonStaticServiceFactory">
+
+<bean id="bookSearchService" factory-bean="nonStaticServiceFactory" factory-method="getBookSearchService"/>
+```
+
+- FactoryBean
+	- 首先是一个bean，可以注册在容器中，需要创建一个实现FactoryBean接口的类
+	- 再次是一个构造对象的工厂
+
+## 方法注入
+
+> 每次调用都让容器返回新的实例
+
+```xml
+<bean id="houseService"
+	class="com.fz.methodinjection.HouseService">
+	<lookup-method name="getHouse" bean="house" />
+</bean>
+<bean id="house" class="com.fz.methodinjection.House"
+	scope="prototype" />
+```
+
+```java
+public class HouseService {
+
+    private House house;
+
+    public House printHouse(int id) {
+        house = getHouse();
+        house.init(id);
+        log.info("House is {}", house);
+        return house;
+    }
+
+    public House getHouse() {
+        return null;
+    }
+}
+```
+
+## 其他方法实现`每次调用都让容器返回新的实例`
+
+- BeanFactoryAware
+
+> 实现了BeanFactoryAware的类将会获取一个BeanFactory的引用
+> 容器在实例化实现了此接口的bean时，会自动将容器本身注入该bean
+> 通过bean.getBean()来返回新的实例
+
+- ObjectFactoryCreatingFactoryBean
+
+> ObjectFactoryCreatingFactoryBean是一个FactoryBean，它可以返回一个ObjectFactory对象
+> ObjectFactory对象可以为我们返回容器管理的相关对象，至于返回什么类型的对象，在构建ObjectFactoryCreatingFactoryBean时，通过setter方法注入
+> 隔离了对BeanFactory的直接引用
+
+## 方法替换
+
+> PrintHouseReplacer需要实现MethodReplacer接口
+
+```xml
+<bean id="houseService"
+	class="com.fz.methodinjection.HouseService">
+	<replaced-method name="printHouse" replacer="printHouseReplacer"/>
+</bean>
+<bean id="printHouseReplacer" class="...PrintHouseReplacer"/>
+```
+
+## 容器的工作原理
+
+> Spring容器以某种方式加载配置元数据，然后根据这些信息绑定整个系统的对象，最终组装成一个可用的基于轻量级容器的应用系统
+
+> 容器实现上述功能的两个阶段
+
+- 容器启动阶段
+
+	- 加载`配置元数据`(Configuration Metadata)
+	- 分析信息组成BeanDefiniton
+	- 将BeanDefinition注册到BeanDefinitionRegistry
+
+- Bean实例化阶段
+
+	- 接受请求
+	- 检查是否初始化
+	- 实例化对象
+	- 注入依赖
+	- 某些回调接口
+	- 返回对象给请求方使用
+
+## 基于BeanFactoryPostProcessor的容器扩展机制
+
+> BeanFactoryPostProcessor是一个FunctionalInterface，执行该function时，BeanDefinition已经就绪，但是Bean尚未被实例化，我们可以对BeanDefinition做出一些额外的操作
+
+> 容器可能同时用于多个BeanFactoryPostProcessor，所以需要实现类同时实现Ordered接口，以保证各个BeanFactoryPostProcessor按照预先设定的顺序执行
+
+- 常用实现子类
+	- PropertyPlaceholderConfigurer
+		- 加载.properties
+		- 替换`占位符${jdbc.username}`
+	- PropertyOverrideConfigurer
+		- 加载.properties
+		- 替换`beanName.propertyName=value`
+
+> 以上两个类都继承了PropertyResourceConfigurer，PropertyResourceConfigurer有一个protected方法convertProperty，重写该方法可以将一些加密property数据`解密后`再覆盖到相应的Bean中
+
+	- CustomEditorConfigurer
+
+> CustomEditorConfigurer只是辅助性的将后期会用到的信息注册到容器中去，不会更改BeanDefinition
+
+> BeanFactory需要手动装配所有的BeanFactoryPostProcessor，ApplicationContext能够自动识别

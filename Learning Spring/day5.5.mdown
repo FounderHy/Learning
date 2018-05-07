@@ -1,0 +1,285 @@
+## 自动化装配bean
+
+- 组件扫描：自动发现创建的bean
+- 自动装配：自动满足bean之间的依赖
+
+### 创建可被发现的bean
+
+- @Component
+	- 标记需要被创建bean的类
+- 启动组件扫描
+	- @ComponentScan in JavaConfig
+		- 默认扫描与配置类相同的包以及这个包下的所有子包
+	- <context:component-scan base-package=""> in XML
+
+### 为组件扫描的bean命名
+
+- 默认命名方式
+	- 将类名的一个字母变为小写
+- @Component("beanName")
+- @Named("beanName")
+
+### 设置组件扫描的基础包
+
+- @ComponentScan("basePackageName")
+- @ComponentScan(basePackages="basePackageName")
+- @ComponentScan(basePackages={"name1", "name2"})
+- @ComponentScan(basePackageClasses={ClassOne.class, ClassTwo.class})
+
+### 通过为bean添加注解实现自动装配
+
+- @Autowired
+	- 标注构造器，标注方法，标注成员变量
+- @Autowired(required=false)
+	- 尝试装配，没有匹配的话，设置为null
+- @Inject
+
+## 通过Java代码装配bean
+
+### 创建配置类
+
+- @Configuration标注配置类
+
+### 声明简单的bean
+
+- @Bean注解告诉Spring这个方法会返回一个对象，这个对象要注册为Spring中的bean
+- 默认bean的id与方法名是一样的
+- @Bean(name="beanName")
+
+### 借助JavaConfig实现注入
+
+- 通过调用方法引用bean
+
+```java
+@Bean
+public BeanOne beanOne() {
+	return new BeanOneImpl();
+}
+
+@Bean
+public BeanTwo beanTwo() {
+	return new BeanTwoImpl(beanOne());
+}
+```
+
+- 通过参数列表引用bean
+
+```java
+@Bean
+public BeanOne beanOne() {
+	return new BeanOneImpl();
+}
+
+@Bean
+public BeanTwo beanTwo(BeanOne beanOne) {
+	return new BeanTwoImpl(beanOne);
+}
+```
+
+- `带有@Bean注解的方法可以采用任何必要的Java功能来产生bean实例`
+
+## 通过XML装配bean
+
+## 导入和混合配置
+
+### 在JavaConfig中导入其他配置
+
+- 导入其他JavaConfig
+	- @Import({OtherJavaConfig1.class, OtherJavaConfig2.class})
+	- @Import(OtherJavaConfig.class)
+- 导入XML
+	- @ImportResource("xmlPath")
+
+### 在XML中导入其他配置
+
+- 导入JavaConfig
+	- <bean class="JavaConfig">
+ 导入其他XML
+ 	- <import resource="config.xml">
+
+## __环境与profile__
+
+- 基于@Conditional和Condition实现
+
+## __条件化的bean__
+
+```java
+@Bean
+@Conditional(MyCondition.class)
+public MyBean myBean() {
+	return new MyBeanImpl();
+}
+```
+
+### 设置给@Conditional的类可以是任意实现了`Condition`接口的类型
+
+```java
+public interface Condition {
+	boolean matches(ConditionContext ctxt, AnnotatedTypeMetadata metadata);
+}
+```
+
+### ConditionContext
+
+- 借助`getRegistry()`返回的BeanDefinitionRegistry检查bean定义
+- 借助`getBeanFactory()`返回的ConfigurableBeanFactory检查bean是否存在，甚至探查bean的属性
+- 借助`getEnvironment()`返回的Environment检查环境变量是否存在以及它的值是什么
+- 读取并探查`getResourceLoader()`返回的ResourceLoader所加载的资源
+- 借助`getClassLoader()`返回ClassLoader加载并检查类是否存在
+
+### AnnotatedTypeMetadata
+
+- 能够让我们检查带有@Bean注解的方法上还有什么其他注解
+
+## 处理自动装配的歧义性
+
+### 标示首选的bean
+
+- @Primary
+
+```java
+@Component
+@Primary
+public class MyBeanImpl implements MyBean {
+	...
+}
+```
+
+```java
+@Bean
+@Primary
+public MyBean myBean() {
+	return new MyBeanImpl();
+}
+```
+
+```xml
+<bean id="myBean" class="MyBeanImpl" primary="true">
+```
+
+### 限定自动装配的bean
+
+- @Qualifier
+	- 默认注解所设置的参数就是想要注入的bean的id
+
+### __创建自定义限定符__
+
+- 在bean声明上添加@Qualifier注解
+
+```java
+@Component
+@Qualifier("CustomQualifierName")
+public class MyBeanImpl implements MyBean {
+	...
+}
+
+@Component
+public class OtherBeanImpl implements OtherBean {
+	@Autowired
+	@Qualifier("CustomQualifierName")
+	private MyBean myBean;
+}
+```
+
+### __创建自定义的限定符注解__
+
+```java
+@Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
+public @interface CustomQualifierName {}
+```
+
+## bean的作用域
+
+- @Scope(value="session", proxyMode=ScopeProxyMode.INTERFACES)
+
+### proxyMode
+
+- 解决会话作用域的bean注入到单例作用域的bean中所遇到的问题
+	- Spring在向单例bean注入会话bean时，并不会实际注入一个实例，而是注入一个代理，当单例bean调用会话bean的方法时，代理会进行懒解析并调用委托给会话作用域内真正的bean实例
+- ScopeProxyMode.INTERFACES
+	- 基于接口的代理
+- ScopeProxyMode.TARGET_CLASS
+	- 基于类的代理，使用CGLib创建基于类的代理
+- XML
+	- 默认采用基于类的代理
+
+```xml
+<bean id="sessionBean" class="MySessionBean" scope="session">
+	<aop:scope-proxy proxy-target-class="false" />
+</bean>
+```
+
+## 运行时植入
+
+### 属性占位符
+
+__注入外部的值__
+
+- 使用@PropertySource和Environment
+
+```java
+@Configuration
+@PropertySource("classpath:/myResource.prperties")
+public class MyBeanConfig {
+
+	@Autowired
+	Environment env;
+
+	@Bean
+	public MyBean myBean(){
+		return new MyBeanImpl(env.getProperty("key1"), env.getProperty("key2"));
+	}
+}
+```
+
+__深入学习Spring的Environment__
+
+- String getProperty(String key)
+- String getProperty(String key, String defaultValue)
+- T getProperty(String key, Class<T> type)
+- T getProperty(String key, Class<T> type, T defaultValue)
+- getRequiredProperty
+- containsPorperty
+- getPropertyAsClass
+- getActiveProfiles
+- getDefaultProfiles
+- acceptsProfiles
+
+__在xml和自动装配中注入外部的值__
+
+- xml
+
+```xml
+<bean id="myBean" class="MyBeanImpl">
+	<constructor-arg index="0" value="${key1}"/>
+	<constructor-arg index="2" value="${key2}"/>
+</bean>
+<context:property-placeholder/>
+```
+
+- 自动装配
+
+```java
+public MyBeanImpl implements MyBean {
+	public MyBeanImpl(
+		@Value("${key1}") String value1,
+		@Value("${key2}") String value2) {
+		this.value1 = value1;
+		this.value2 = value2;
+	}
+}
+
+@Bean
+public PropertySourcePlaceholderConfigurer placeholderConfigurer() {
+	return new PropertySourcePlaceholderConfigurer();
+}
+```
+
+### Spring表达式语言 
+
+- #{...}
+
+__功能强大！！！__
+

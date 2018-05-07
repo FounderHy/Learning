@@ -1,0 +1,49 @@
+## 统一的资源加载策略
+
+> 基于Resource和ResourceLoader接口的资源抽线与资源加载
+
+- Resource
+	- ByteArrayResource
+	- ClassPathResource
+	- FileSystemResource
+	- UrlResource
+	- InputStreamResource
+
+- ResourceLoader
+	- DefaultResourceLoader
+
+> 查找逻辑：
+> 1. 遍历DefaultResourceLoader对象的protocolResolvers，如果可以通过ProtocolResolver返回一个非空Resource就返回改Resouce
+> 2. 否则，检查资源路径是否以”/“打头，如果是，则委派getResourceByPath(String)方法来定位
+> 3. 否则，检查资源路径是否以classpath:前缀打头，如果是，尝试构造ClassPathResource类型资源并返回
+> 4. 否则，尝试通过URL，根据资源路径来定位资源，如果没有抛出MalformedURLException，则会构造UrlResource类型资源并返回
+> 5. 否则，就委派getResourceByPath(String)方法来定位，其默认实现逻辑是构造ClassPathResource类型资源并返回
+
+- ApplicationContext既是ResourceLoader又是ResourcePatternResolver
+
+> 某个bean需要`ResourceLoader类型的依赖注入`，可以通过实现ResourceLoaderAware或者ApplicationContextAware接口
+> ApplicationContext容器可以正确识别Resource类型并转换后注入相关对象
+
+## ApplicationContext的Resource加载行为
+
+> classpath*:与classpath:协议的区别是前者如果可以在classpath中找到多个资源，则返回多个
+
+## MessageSource与ApplicationContext
+
+> MessageSource是Spring进一步抽象的国际化信息访问接口
+
+## 可用MessageSource
+
+- StaticMessageSource
+- ResourceBundleMessageSource
+- ReloadableResourceBundleMessageSource
+
+## 容器内部事件发布
+
+- 自定义事件发布
+
+	- 给出自定义时间类型
+
+> 扩展java.util.EventObject类
+
+	- 实现针对自定义事件类的事件监听接口

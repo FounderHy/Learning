@@ -1,0 +1,1638 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>body {
+  max-width: 980px;
+  border: 1px solid #ddd;
+  outline: 1300px solid #fff;
+  margin: 16px auto;
+}
+
+body .markdown-body
+{
+  padding: 45px;
+}
+
+@font-face {
+  font-family: fontawesome-mini;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+@font-face {
+  font-family: octicons-anchor;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+.markdown-body {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #333333;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body mark {
+  background: #ff0;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+.markdown-body sup {
+  top: -0.5em;
+}
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body .codehilitetable {
+  border: 0;
+  border-spacing: 0;
+}
+
+.markdown-body .codehilitetable tr {
+  border: 0;
+}
+
+.markdown-body .codehilitetable pre,
+.markdown-body .codehilitetable div.codehilite {
+  margin: 0;
+}
+
+.markdown-body .linenos,
+.markdown-body .code,
+.markdown-body .codehilitetable td {
+  border: 0;
+  padding: 0;
+}
+
+.markdown-body td:not(.linenos) .linenodiv {
+  padding: 0 !important;
+}
+
+.markdown-body .code {
+  width: 100%;
+}
+
+.markdown-body .linenos div pre,
+.markdown-body .linenodiv pre,
+.markdown-body .linenodiv {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.markdown-body .code div pre,
+.markdown-body .code div {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.markdown-body * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body input {
+  font: 13px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.4;
+}
+
+.markdown-body a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:focus,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before,
+.markdown-body hr:after {
+  display: table;
+  content: " ";
+}
+
+.markdown-body hr:after {
+  clear: both;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body kbd {
+  background-color: #e7e7e7;
+  background-image: -moz-linear-gradient(#fefefe, #e7e7e7);
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  background-repeat: repeat-x;
+  border-radius: 2px;
+  border: 1px solid #cfcfcf;
+  color: #000;
+  padding: 3px 5px;
+  line-height: 10px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  display: inline-block;
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body .headeranchor-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+
+.markdown-body .headeranchor-link:focus {
+  outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-body h1 .headeranchor,
+.markdown-body h2 .headeranchor,
+.markdown-body h3 .headeranchor,
+.markdown-body h4 .headeranchor,
+.markdown-body h5 .headeranchor,
+.markdown-body h6 .headeranchor {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+
+.markdown-body h1:hover .headeranchor-link,
+.markdown-body h2:hover .headeranchor-link,
+.markdown-body h3:hover .headeranchor-link,
+.markdown-body h4:hover .headeranchor-link,
+.markdown-body h5:hover .headeranchor-link,
+.markdown-body h6:hover .headeranchor-link {
+  height: 1em;
+  padding-left: 8px;
+  margin-left: -30px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .headeranchor-link .headeranchor,
+.markdown-body h2:hover .headeranchor-link .headeranchor,
+.markdown-body h3:hover .headeranchor-link .headeranchor,
+.markdown-body h4:hover .headeranchor-link .headeranchor,
+.markdown-body h5:hover .headeranchor-link .headeranchor,
+.markdown-body h6:hover .headeranchor-link .headeranchor {
+  display: inline-block;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body .admonition {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body code,
+.markdown-body samp {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .codehilite {
+  margin-bottom: 16px;
+}
+
+.markdown-body .codehilite pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .codehilite pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+/* Admonition */
+.markdown-body .admonition {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid #e0e0e0;
+  border-left: 6px solid #333;
+  padding: 10px 10px 10px 30px;
+}
+
+.markdown-body .admonition table {
+  color: #333;
+}
+
+.markdown-body .admonition p {
+  padding: 0;
+}
+
+.markdown-body .admonition-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.markdown-body .admonition>.admonition-title {
+  color: #333;
+}
+
+.markdown-body .attention>.admonition-title {
+  color: #a6d796;
+}
+
+.markdown-body .caution>.admonition-title {
+  color: #d7a796;
+}
+
+.markdown-body .hint>.admonition-title {
+  color: #96c6d7;
+}
+
+.markdown-body .danger>.admonition-title {
+  color: #c25f77;
+}
+
+.markdown-body .question>.admonition-title {
+  color: #96a6d7;
+}
+
+.markdown-body .note>.admonition-title {
+  color: #d7c896;
+}
+
+.markdown-body .admonition:before,
+.markdown-body .attention:before,
+.markdown-body .caution:before,
+.markdown-body .hint:before,
+.markdown-body .danger:before,
+.markdown-body .question:before,
+.markdown-body .note:before {
+  font: normal normal 16px fontawesome-mini;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1.5;
+  color: #333;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.markdown-body .admonition:before {
+  content: "\f056\00a0";
+  color: 333;
+}
+
+.markdown-body .attention:before {
+  content: "\f058\00a0";
+  color: #a6d796;
+}
+
+.markdown-body .caution:before {
+  content: "\f06a\00a0";
+  color: #d7a796;
+}
+
+.markdown-body .hint:before {
+  content: "\f05a\00a0";
+  color: #96c6d7;
+}
+
+.markdown-body .danger:before {
+  content: "\f057\00a0";
+  color: #c25f77;
+}
+
+.markdown-body .question:before {
+  content: "\f059\00a0";
+  color: #96a6d7;
+}
+
+.markdown-body .note:before {
+  content: "\f040\00a0";
+  color: #d7c896;
+}
+
+.markdown-body .admonition::after {
+  content: normal;
+}
+
+.markdown-body .attention {
+  border-left: 6px solid #a6d796;
+}
+
+.markdown-body .caution {
+  border-left: 6px solid #d7a796;
+}
+
+.markdown-body .hint {
+  border-left: 6px solid #96c6d7;
+}
+
+.markdown-body .danger {
+  border-left: 6px solid #c25f77;
+}
+
+.markdown-body .question {
+  border-left: 6px solid #96a6d7;
+}
+
+.markdown-body .note {
+  border-left: 6px solid #d7c896;
+}
+
+.markdown-body .admonition>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .admonition>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* progress bar*/
+.markdown-body .progress {
+  display: block;
+  width: 300px;
+  margin: 10px 0;
+  height: 24px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ededed;
+  position: relative;
+  box-shadow: inset -1px 1px 3px rgba(0, 0, 0, .1);
+}
+
+.markdown-body .progress-label {
+  position: absolute;
+  text-align: center;
+  font-weight: bold;
+  width: 100%; margin: 0;
+  line-height: 24px;
+  color: #333;
+  text-shadow: 1px 1px 0 #fefefe, -1px -1px 0 #fefefe, -1px 1px 0 #fefefe, 1px -1px 0 #fefefe, 0 1px 0 #fefefe, 0 -1px 0 #fefefe, 1px 0 0 #fefefe, -1px 0 0 #fefefe, 1px 1px 2px #000;
+  -webkit-font-smoothing: antialiased !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.markdown-body .progress-bar {
+  height: 24px;
+  float: left;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #96c6d7;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 0 rgba(0, 0, 0, .1);
+  background-size: 30px 30px;
+  background-image: -webkit-linear-gradient(
+    135deg, rgba(255, 255, 255, .4) 27%,
+    transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%,
+    transparent 77%, transparent
+  );
+  background-image: -moz-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -ms-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -o-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+}
+
+.markdown-body .progress-100plus .progress-bar {
+  background-color: #a6d796;
+}
+
+.markdown-body .progress-80plus .progress-bar {
+  background-color: #c6d796;
+}
+
+.markdown-body .progress-60plus .progress-bar {
+  background-color: #d7c896;
+}
+
+.markdown-body .progress-40plus .progress-bar {
+  background-color: #d7a796;
+}
+
+.markdown-body .progress-20plus .progress-bar {
+  background-color: #d796a6;
+}
+
+.markdown-body .progress-0plus .progress-bar {
+  background-color: #c25f77;
+}
+
+.markdown-body .candystripe-animate .progress-bar{
+  -webkit-animation: animate-stripes 3s linear infinite;
+  -moz-animation: animate-stripes 3s linear infinite;
+  animation: animate-stripes 3s linear infinite;
+}
+
+@-webkit-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@-moz-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+.markdown-body .gloss .progress-bar {
+  box-shadow:
+    inset 0 4px 12px rgba(255, 255, 255, .7),
+    inset 0 -12px 0 rgba(0, 0, 0, .05);
+}
+
+/* Multimarkdown Critic Blocks */
+.markdown-body .critic_mark {
+  background: #ff0;
+}
+
+.markdown-body .critic_delete {
+  color: #c82829;
+  text-decoration: line-through;
+}
+
+.markdown-body .critic_insert {
+  color: #718c00 ;
+  text-decoration: underline;
+}
+
+.markdown-body .critic_comment {
+  color: #8e908c;
+  font-style: italic;
+}
+
+.markdown-body .headeranchor {
+  font: normal normal 16px octicons-anchor;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.headeranchor:before {
+  content: '\f05c';
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  margin: 0 4px 0.25em -20px;
+  vertical-align: middle;
+}
+
+/* Media */
+@media only screen and (min-width: 480px) {
+  .markdown-body {
+    font-size:14px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .markdown-body {
+    font-size:16px;
+  }
+}
+
+@media print {
+  .markdown-body * {
+    background: transparent !important;
+    color: black !important;
+    filter:none !important;
+    -ms-filter: none !important;
+  }
+
+  .markdown-body {
+    font-size:12pt;
+    max-width:100%;
+    outline:none;
+    border: 0;
+  }
+
+  .markdown-body a,
+  .markdown-body a:visited {
+    text-decoration: underline;
+  }
+
+  .markdown-body .headeranchor-link {
+    display: none;
+  }
+
+  .markdown-body a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  .markdown-body abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  .markdown-body .ir a:after,
+  .markdown-body a[href^="javascript:"]:after,
+  .markdown-body a[href^="#"]:after {
+    content: "";
+  }
+
+  .markdown-body pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .markdown-body pre,
+  .markdown-body blockquote {
+    border: 1px solid #999;
+    padding-right: 1em;
+    page-break-inside: avoid;
+  }
+
+  .markdown-body .progress,
+  .markdown-body .progress-bar {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .markdown-body .progress {
+    border: 1px solid #ddd;
+  }
+
+  .markdown-body .progress-bar {
+    height: 22px;
+    border-right: 1px solid #ddd;
+  }
+
+  .markdown-body tr,
+  .markdown-body img {
+    page-break-inside: avoid;
+  }
+
+  .markdown-body img {
+    max-width: 100% !important;
+  }
+
+  .markdown-body p,
+  .markdown-body h2,
+  .markdown-body h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .markdown-body h2,
+  .markdown-body h3 {
+    page-break-after: avoid;
+  }
+}
+</style><title>day5-spring-ioc-review</title></head><body><article class="markdown-body"><div class="toc">
+<ul>
+<li><a href="#ioc-service-provider">Ioc Service Provider</a><ul>
+<li><a href="#1">1. 概述</a></li>
+<li><a href="#2">2. 三种依赖注入的方式</a></li>
+</ul>
+</li>
+<li><a href="#spring-ioc">Spring IoC 容器</a><ul>
+<li><a href="#beanfactory">BeanFactory</a><ul>
+<li><a href="#1_1">1. 概述</a></li>
+<li><a href="#2_1">2. 对象注册与依赖绑定方式</a><ul>
+<li><a href="#21">2.1 直接编码方式</a></li>
+<li><a href="#22">2.2 外部配置文件方式</a></li>
+<li><a href="#23">2.3 注解</a></li>
+<li><a href="#24-javaconfig">2.4 JavaConfig</a></li>
+</ul>
+</li>
+<li><a href="#3-xml">3. XML 配置详解</a><ul>
+<li><a href="#31-beans">3.1 &lt;beans&gt;</a></li>
+<li><a href="#32-dependency-check">3.2 dependency-check 介绍</a></li>
+<li><a href="#33-bean">3.3 &lt;bean&gt;</a></li>
+<li><a href="#34-constructor-arg">3.4 &lt;constructor-arg&gt;</a></li>
+<li><a href="#35-property">3.5 &lt;property&gt;</a></li>
+<li><a href="#36-constructor-arg-property">3.6 &lt;constructor-arg&gt; 和 &lt;property&gt; 中可用的配置项</a></li>
+<li><a href="#37-bean">3.7 bean 的继承</a></li>
+<li><a href="#38-bean-scope">3.8 bean 的 scope</a></li>
+<li><a href="#39-scope">3.9 自定义 scope 类型</a></li>
+<li><a href="#310">3.10 工厂方法</a></li>
+<li><a href="#311-factorybean">3.11 自定义 FactoryBean</a></li>
+<li><a href="#312">3.12 方法注入</a></li>
+<li><a href="#313">3.13 方法替换</a></li>
+</ul>
+</li>
+<li><a href="#4-spring-ioc">4. Spring Ioc 容器的工作流程详解</a><ul>
+<li><a href="#41">4.1 概述</a></li>
+<li><a href="#42">4.2 插手容器的启动</a></li>
+<li><a href="#43-bean">4.3 Bean 实例化阶段</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#applicationcontext">ApplicationContext</a><ul>
+<li><a href="#1_2">1. 统一的资源加载</a><ul>
+<li><a href="#11-resource">1.1 Resource</a></li>
+<li><a href="#12-resourceloader">1.2 定位和查找资源的 ResourceLoader</a></li>
+<li><a href="#13-applicationcontext-resourceloader">1.3 ApplicationContext 与 ResourceLoader</a></li>
+</ul>
+</li>
+<li><a href="#2_2">2. 国际化信息支持</a><ul>
+<li><a href="#21-messagesource">2.1 MessageSource</a></li>
+</ul>
+</li>
+<li><a href="#3">3. 容器内部事件发布</a><ul>
+<li><a href="#31-applicationevent">3.1 ApplicationEvent</a></li>
+<li><a href="#32-applicationlistener">3.2 ApplicationListener</a></li>
+<li><a href="#33-applicationeventpublisher">3.3 ApplicationEventPublisher</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="ioc-service-provider"><a name="user-content-ioc-service-provider" href="#ioc-service-provider" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Ioc Service Provider</h2>
+<h3 id="1"><a name="user-content-1" href="#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 概述</h3>
+<p><code>被注入对象</code>需要什么，<code>Ioc Service Provider</code> 就会将相应的<code>被依赖对象</code>注入到<code>被注入对象</code></p>
+<h3 id="2"><a name="user-content-2" href="#2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 三种依赖注入的方式</h3>
+<ul>
+<li>构造方法注入</li>
+<li>setter 方法注入</li>
+<li>接口注入</li>
+</ul>
+<blockquote>
+<p>setter 方法注入可以一定程度上避免循环依赖</p>
+</blockquote>
+<h2 id="spring-ioc"><a name="user-content-spring-ioc" href="#spring-ioc" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Spring IoC 容器</h2>
+<h3 id="beanfactory"><a name="user-content-beanfactory" href="#beanfactory" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>BeanFactory</h3>
+<h4 id="1_1"><a name="user-content-1_1" href="#1_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 概述</h4>
+<ul>
+<li>基础类型 IoC 容器，提供完善的 IoC服务支持</li>
+<li>默认采用延迟初始化策略</li>
+</ul>
+<h4 id="2_1"><a name="user-content-2_1" href="#2_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 对象注册与依赖绑定方式</h4>
+<h5 id="21"><a name="user-content-21" href="#21" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.1 直接编码方式</h5>
+<ul>
+<li>创建 <code>BeanDefinition</code></li>
+<li>使用 <code>BeanDefinitionRegistry</code> 注册创建的 BeanDefinition</li>
+<li>为 BeanDefinition 指定依赖关系<ul>
+<li><code>setConstructorArgumentValues</code></li>
+<li><code>setPropertyValues</code></li>
+</ul>
+</li>
+<li><code>BeanFactory</code> 根据 BeanDefinition 中保存的对象的信息为客户端返回一个完备可用的对象实例</li>
+</ul>
+<h5 id="22"><a name="user-content-22" href="#22" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.2 外部配置文件方式</h5>
+<ul>
+<li>根据不同格式的外部配置文件，由 <code>BeanDefinitionReader</code> 相应的实现类负责读取配置文件内容，并创建 BeanDefinition</li>
+<li>将创建的 BeanDefinition 注册到 BeanDefinitionRegistry 中</li>
+</ul>
+<h5 id="23"><a name="user-content-23" href="#23" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.3 注解</h5>
+<ul>
+<li><code>@Autowired</code> 告诉 Spring 要为当前对象注入哪些依赖对象<ul>
+<li>按照类型匹配进行依赖注入，类似于 XML 配置中的 byType</li>
+<li>可以标注于类定义的多个位置<ul>
+<li>属性</li>
+<li>构造方法：类似与 constructor</li>
+<li>方法</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>@Qualifier</code> byName 自动绑定的注解版</li>
+<li><code>@Component</code> 告诉 Spring 当前类需要被添加到容器中进行管理</li>
+<li><code>&lt;context:component-scan&gt;</code> 告诉 Spring 到指定的包下面扫描标注有 @Component 的类</li>
+<li>JSR250</li>
+</ul>
+<pre><code class="xml">&lt;context:component-scan base-package=&quot;com.fz.demo&quot;&gt;
+</code></pre>
+
+<p><strong>标注的实现原理 BeanPostProcessor</strong></p>
+<ul>
+<li>添加 <code>&lt;bean class="...AutowiredAnnotationBeanPostProcessor" /&gt;</code> 来支持标注功能</li>
+<li>添加 <code>&lt;bean class="...CommonAnnotationBeanPostProcessor" /&gt;</code> 来支持 JSR250 标注功能</li>
+<li>添加 <code>&lt;context:annotation-config /&gt;</code> 可以搞定以上所有 BeanPostProcessor 配置<ul>
+<li>PersistenceAnnotationBeanPostProcessor</li>
+<li>RequiredAnnotationBeanPostProcessor</li>
+</ul>
+</li>
+<li>添加 <code>&lt;context:component-scan&gt;</code> 可以搞定上述两个 BeanPostProcessor 配置</li>
+</ul>
+<h5 id="24-javaconfig"><a name="user-content-24-javaconfig" href="#24-javaconfig" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.4 JavaConfig</h5>
+<h4 id="3-xml"><a name="user-content-3-xml" href="#3-xml" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. XML 配置详解</h4>
+<h5 id="31-beans"><a name="user-content-31-beans" href="#31-beans" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.1 <code>&lt;beans&gt;</code></h5>
+<ul>
+<li>default-lazy-init: true, false</li>
+<li>default-autowire: no, byName, byType, constructor, autodetect (现已被废弃)</li>
+<li>default-dependecy-check: none, simple, object, all</li>
+<li>default-init-method:</li>
+<li>default-destroy-method:</li>
+</ul>
+<h5 id="32-dependency-check"><a name="user-content-32-dependency-check" href="#32-dependency-check" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.2 dependency-check 介绍</h5>
+<ul>
+<li>bean 被创建时，默认情况下，Spring 对于其属性<code>是否已被初始化</code>是不做检查的，如果需要对属性的初始化情况进行检查，在 Spring 2.x 中通过使用 dependency-check 设定</li>
+<li>可选值<ul>
+<li>none: 不做检查</li>
+<li>simple: 只检查简单类型以及集合类型属性</li>
+<li>object: 检查除简单类型以及集合类型以外的引用类型属性</li>
+<li>all: 检查所有类型</li>
+</ul>
+</li>
+<li>Spring 3.0 的替代方案<ul>
+<li>只使用构造方法注入（而不是setter方法注入）来保存特定的属性已被初始化</li>
+<li>用 <code>@Required</code> 标注 setter 方法<ul>
+<li>仅仅使用 @Required 标注是不起作用的，你需要添加 <code>RequiredAnnotationBeanPostProcessor</code> 到容器中<ul>
+<li>添加 <code>&lt;context:annotation-config /&gt;</code> 或者</li>
+<li>添加 <code>&lt;bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/&gt;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>用 <code>init-method</code> 检查特定的属性是否被初始化</li>
+<li>用 <code>@Autowired(required = false or true)</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="33-bean"><a name="user-content-33-bean" href="#33-bean" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.3 <code>&lt;bean&gt;</code></h5>
+<ul>
+<li>id<ul>
+<li>指定 <code>beanName</code></li>
+</ul>
+</li>
+<li>name<ul>
+<li>指定别名</li>
+</ul>
+</li>
+<li>class<ul>
+<li>指定类型</li>
+</ul>
+</li>
+<li>depends-on<ul>
+<li>没有明确指定对象A的依赖于对象B，通过depends-on通知容器在实例化对象A之前首先实例化对象B</li>
+</ul>
+</li>
+<li>autowire</li>
+<li>dependency-check</li>
+<li>lazy-init</li>
+</ul>
+<h5 id="34-constructor-arg"><a name="user-content-34-constructor-arg" href="#34-constructor-arg" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.4 <code>&lt;constructor-arg&gt;</code></h5>
+<ul>
+<li>type<ul>
+<li>指定参数的类型</li>
+</ul>
+</li>
+<li>index<ul>
+<li>指定参数的顺序</li>
+</ul>
+</li>
+<li>name</li>
+</ul>
+<h5 id="35-property"><a name="user-content-35-property" href="#35-property" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.5 <code>&lt;property&gt;</code></h5>
+<ul>
+<li>name<ul>
+<li>指定属性名称</li>
+</ul>
+</li>
+</ul>
+<h5 id="36-constructor-arg-property"><a name="user-content-36-constructor-arg-property" href="#36-constructor-arg-property" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.6 <code>&lt;constructor-arg&gt;</code> 和 <code>&lt;property&gt;</code> 中可用的配置项</h5>
+<ul>
+<li>value<ul>
+<li>为对象注入简单的数据类型（包括 <code>String 类型</code> 和 原始类型的<code>包装器</code>，如 Integer）</li>
+</ul>
+</li>
+<li>ref<ul>
+<li>用来引用容器中其他的对象实例</li>
+<li>local<ul>
+<li>只能指定与当前配置的对象在同一个配置文件中的对象引用</li>
+</ul>
+</li>
+<li>parent<ul>
+<li>只能指定位于当前容器的父容器中定义的对象引用</li>
+</ul>
+</li>
+<li>bean<ul>
+<li>不限制定义的位置</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>idref<ul>
+<li>为当前对象注入所依赖对象的名称<code>而不是引用</code></li>
+</ul>
+</li>
+<li>bean<ul>
+<li>内部 bean，只能被当前对象引用</li>
+</ul>
+</li>
+<li>list<ul>
+<li>注入对象类型为 <code>java.util.List</code> 及其子类或者<code>数组类型</code>的依赖对象</li>
+</ul>
+</li>
+<li>set<ul>
+<li>注入对象类型为 <code>java.util.Set</code> 及其子类的依赖对象</li>
+</ul>
+</li>
+<li>map<ul>
+<li>entry<ul>
+<li>key / key-ref</li>
+<li>value / value-ref</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>props<ul>
+<li>简化后的 <map></li>
+<li>只能指定 String 类型的键和值</li>
+<li><prop><ul>
+<li>key</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>null<ul>
+<li>空元素</li>
+</ul>
+</li>
+</ul>
+<h5 id="37-bean"><a name="user-content-37-bean" href="#37-bean" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.7 bean 的继承</h5>
+<ul>
+<li>parent</li>
+<li>abstract<ul>
+<li><code>abstract</code> 为 true，说明这个 bean 定义不需要被初始化，这个 bean 也就不需要指定 class</li>
+</ul>
+</li>
+</ul>
+<h5 id="38-bean-scope"><a name="user-content-38-bean-scope" href="#38-bean-scope" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.8 bean 的 scope</h5>
+<ul>
+<li>scope 用来声明容器中的对象所应该处的<code>限定场景</code>或者<code>对象的存活时间</code>，即容器在对象进入其相应的 scope 之前，生成并装配这些对象，在该对象不再处于这些 scope 限定后，容器通常会销毁这些对象</li>
+</ul>
+<h5 id="39-scope"><strong>3.9 自定义 scope 类型</strong></h5>
+<ul>
+<li>自定义一个 Scope 接口的实现类</li>
+<li>将自定义Scope 注册到容器中</li>
+</ul>
+<p>注册自定义 Scope 的方法：</p>
+<ul>
+<li>ConfigurableBeanFactory.registerScope(String scopeName, Scope scope)</li>
+<li>Spring 提供一个专门用于统一注册自定义scope 的 <code>BeanFactoryPostProcessor</code> 实现，即 <code>CustomScopeConfigurer</code></li>
+<li>ApplicatonContext 能够<code>自动识别并加载</code> BeanFactoryPostProcessor，所以我们就可以直接在配置文件中，通过 CustomScopeConfigurer 来注册 自定义的 Scope 实现类</li>
+</ul>
+<p><strong>Example：</strong></p>
+<pre><code class="xml">&lt;bean class=&quot;...CustomScopeConfigurer&quot;&gt;
+    &lt;property name=&quot;scopes&quot;&gt;
+        &lt;entry name=&quot;customScopeName&quot; ref=&quot;...CustomScopeImpl&quot;
+    &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<h5 id="310"><a name="user-content-310" href="#310" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.10 工厂方法</h5>
+<ul>
+<li>静态工厂方法<ul>
+<li>class 指定工厂方法类</li>
+<li><code>factory-method</code> 指定具体的工厂方法</li>
+<li>constructor-arg 指定工厂方法的参数</li>
+</ul>
+</li>
+</ul>
+<pre><code class="xml">&lt;bean id=&quot;...&quot; class=&quot;...FactoryClass&quot; factory-method=&quot;factoryMethodInFactoryClass&quot;&gt;
+    &lt;constructor-arg index=&quot;0&quot; ref=&quot;...&quot; /&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<ul>
+<li>非静态工厂方法<ul>
+<li><code>factory-bean</code> 指定非静态工厂对象实例</li>
+<li>factory-method 指定具体的工厂方法</li>
+<li>constructor-arg 指定工厂方法的参数</li>
+</ul>
+</li>
+</ul>
+<pre><code class="xml">&lt;bean id=&quot;nonStaticFactory&quot; class=&quot;...NonStaticFactoryClass&quot; /&gt;
+
+&lt;bean id=&quot;...&quot; factory-bean=&quot;nonStaticFactory&quot; factory-method=&quot;...factoryMethodInFactoryClass&quot;&gt;
+    &lt;constructor-arg index=&quot;0&quot; ref=&quot;...&quot; /&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<h5 id="311-factorybean"><strong>3.11 自定义 FactoryBean</strong></h5>
+<p>概述:<br />
+- <code>FactoryBean</code> 是 Spring 提供的可以扩展容器对象实例化逻辑的接口<br />
+- 首先是一个 Bean，然后是一个可以生产对象的工厂</p>
+<p>步骤：<br />
+- 自定义一个 FactoryBean 的实现类<br />
+- 将自定义的 FactoryBean 注册到容器中<br />
+- 使用这个 FactoryBean</p>
+<p><strong>Example:</strong></p>
+<pre><code class="xml">&lt;bean id=&quot;customFactoryBean&quot; class=&quot;...CustomFactoryBean&quot; /&gt;
+
+&lt;bean id=&quot;...&quot; class=&quot;...&quot;&gt;
+    &lt;property name=&quot;...&quot; ref=&quot;customFactoryBean&quot; /&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<blockquote>
+<p>自定义 FactoryBean 的类型是 FactoryBean，但是通过 id 引用，容器返回的是 FactoryBean 所生产的对象类型</p>
+<p>如果一定要取得 FactoryBean 本身，可以通过在 bean 定义的 id 之前加上前缀 <code>&amp;</code> 来达到目的</p>
+</blockquote>
+<h5 id="312"><strong>3.12 方法注入</strong></h5>
+<p>概述：<br />
+- 方法被调用的时候，每次返回指定类型的对象实例</p>
+<p><strong>解决问题：</strong><br />
+- 每次调用都让容器返回新的对象实例</p>
+<p>步骤：<br />
+- 方法声明须符合规定<br />
+    - <code>&lt;public | protected&gt; [abstract] &lt;return-type&gt; theMethodName(no-arguments)</code>, 即方法必须能够被子类实现或者重写，因为方法注入的<code>实现原理</code>是容器为我们要进行方法注入的对象<code>使用 Cglib 动态生成一个子类实现</code>，从而替代当前对象<br />
+    - 添加 <code>lookup-method</code> 配置<br />
+        - name 指定需要注入的方法名<br />
+        - bean 指定需要注入的对象</p>
+<p><strong>Example:</strong></p>
+<pre><code class="xml">&lt;bean id=&quot;newBean&quot; class=&quot;...&quot; scope=&quot;prototype&quot; /&gt;
+
+&lt;bean id=&quot;persistBean&quot; class=&quot;...PersistBean&quot;&gt;
+    &lt;lookup-method name=&quot;getNewBean&quot; bean=&quot;newBean&quot; /&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<p><strong>使用 BeanFactoryAware 解决上述问题：</strong></p>
+<ul>
+<li>让 PersistBean 拥有一个 BeanFactory 的引用</li>
+<li>Spring 提供 <code>BeanFactoryAware</code> 接口，容器在进行实例化实现了此接口的 bean 的过程中，会自动将容器自身注入该 bean</li>
+</ul>
+<p><strong>使用 ObjectFactoryCreatingFactoryBean 解决上述问题：</strong></p>
+<ul>
+<li><code>ObjectFactoryCreatingFactoryBean</code> 是 FactoryBean 的一个实现类，它返回一个 <code>ObjectFactory</code> 对象</li>
+<li>调用 ObjectFactory.getObject() 等价于 beanFactory.getBean(String beanName)，即可以返回一个 bean 的对象实例</li>
+<li>ObjectFactoryCreatingFactoryBean 实现了 BeanFactoryAware 接口，所以它拥有一个 BeanFactory 对象引用，<code>targetBeanName</code> 是 ObjectFactoryCreatingFactoryBean 的一个属性，它指定了 ObjectFactory.getObject() 返回的 bean 的 beanName</li>
+<li>通过在配置文件中配置 ObjectFactoryCreatingFactoryBean 的 targetBeanName，ObjectFactoryCreatingFactoryBean 返回的 ObjectFactory 对象可以返回一个我们指定的类型的对象实例</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="xml">&lt;bean id=&quot;newBean&quot; class=&quot;...&quot; scope=&quot;prototype&quot; /&gt;
+
+&lt;bean id=&quot;objectFactoryCreatingFactoryBean&quot; class=&quot;...ObjectFactoryCreatingFactoryBean&quot;&gt;
+    &lt;property name=&quot;targetBeanName&quot; idref=&quot;newBean&quot; /&gt;
+&lt;/bean&gt;
+
+&lt;bean id=&quot;persistBean&quot; class=&quot;...PersistBean&quot; &gt;
+    &lt;property name=&quot;objectFactory&quot; ref=&quot;objectFactoryCreatingFactoryBean&quot; /&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<h5 id="313"><strong>3.13 方法替换</strong></h5>
+<p>步骤：<br />
+- 自定义一个 <code>MethodReplacer</code> 实现类<br />
+- 注册这个自定义类<br />
+    - replace-method<br />
+        - name：指定需要被替换的方法名<br />
+        - replacer：指定自定义 MethodReplacer 类的 bean 引用</p>
+<h4 id="4-spring-ioc"><strong>4. Spring Ioc 容器的工作流程详解</strong></h4>
+<h5 id="41"><a name="user-content-41" href="#41" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.1 概述</h5>
+<ul>
+<li>
+<p>容器启动阶段</p>
+<ul>
+<li>通过某种方式加载 Configuration MetaData</li>
+<li>容器需要依赖某些工具类（BeanDefinitionReader）对加载的 Configuration MetaData 进行解析和分析，并将分析后的信息编组为相应的 BeanDefiniton</li>
+<li>将 BeanDefinition 注册到相应的 BeanDefinitonRegistry</li>
+</ul>
+</li>
+<li>
+<p>Bean 实例化阶段</p>
+<ul>
+<li>容器会检查所请求的对象之前是否已经初始化</li>
+<li>如果没有，会根据 BeanDefinition 所提供的信息实例化被请求对象，并为其注入依赖</li>
+<li>如果该对象实现了某些回调接口，会根据回掉接口的要求来装配它</li>
+<li>容器将对象返回给请求方使用</li>
+</ul>
+</li>
+</ul>
+<h5 id="42"><strong>4.2 插手容器的启动</strong></h5>
+<p><strong>容器扩展机制 BeanFactoryPostProcessor</strong></p>
+<ul>
+<li>该机制允许我们在容器<code>实例化相应对象之前</code>，对注册到容器的 BeanDefinition 所保存的信息做相应的修改</li>
+<li>这就相当于在容器启动阶段最后加入一道工序，让我们对最终的 BeanDefinition 做一些额外的操作</li>
+</ul>
+<p><strong>自定义 BeanFactoryPostProcessor</strong></p>
+<ul>
+<li>自定义一个实现了 BeanFactoryPostProcessor 接口的类</li>
+<li>因为一个容器可能拥有多个 BeanFactoryPostProcessor，这个时候可能需要实现类同时 <code>Ordered</code> 接口，以保证各个 BeanFactoryPostProcessor 可以按照预先设定的顺序执行</li>
+</ul>
+<p><strong>Spring 中存在的，常用的 BeanFactoryPostProcessor</strong></p>
+<p><em>(1) PropertyPlaceholderConfigurer</em></p>
+<ul>
+<li>
+<p>PropertyPlaceholderConfigurer 允许我们在 XML 配置文件中<code>使用占位符</code>，并将这些占位符所代表的资源单独配置到简单的 properties 文件中来加载</p>
+</li>
+<li>
+<p>PropertyPlaceholderConfigurer 不单会从其配置的 properties 文件中加载配置项，同时还会检查 Java 的 System 类中的 Properties</p>
+</li>
+</ul>
+<p><em>(2) PropertyOverrideConfigurer</em></p>
+<p>概述:</p>
+<ul>
+<li>对容器中的某些 bean 定义的 property 信息进行覆盖</li>
+</ul>
+<p>步骤：</p>
+<ul>
+<li>我们需要按照如下规则提供一个 PropertyOverrideConfigurer 使用的配置文件:<ul>
+<li><code>beanName.propertyName=value</code></li>
+</ul>
+</li>
+<li>在 XML 文件中配置 PropertyOverrideConfigurer</li>
+</ul>
+<blockquote>
+<p>PropertyPlaceholderConfigurer 和 PropertyOverrideConfigurer 都继承了 PropertyResourceConfigurer，可以通过 <code>重写convertPropertyValue</code> 对相应的配置项进行转换，如<code>解密</code></p>
+</blockquote>
+<p><em>(3) CustomEditorConfigurer</em></p>
+<p>背景：</p>
+<ul>
+<li>XML 配置文件所记载的都是 String 类型的数据，最终应用程序却是由各种类型的对象所构成</li>
+<li>要想完成这种由字符串到具体对象的转换，都需要这种转换规则相关的信息</li>
+<li>CustomEditorConfigurer 就是帮助我们<code>传达类似信息</code>的</li>
+</ul>
+<p><strong>自定义 <code>PropertyEditor</code>:</strong></p>
+<ul>
+<li>自定义一个 PropertyEditor 接口的实现类（可以继承 <code>PropertyEditorSupport</code>）</li>
+<li>通过 CustomEditorConfigurer 注册自定义个 PropertyEditor 实现类</li>
+<li>Spring 2.0以后，通常使用 <code>propertyEditorRegistrars</code> 而不是 <code>customEditors</code> 属性来指定自定义的 PropertyEditor</li>
+</ul>
+<pre><code class="xml">&lt;bean id=&quot;customPropertyEditor&quot; class=&quot;...CustomPropertyEditor&quot;&gt;
+    ...
+&lt;/bean&gt;
+
+&lt;bean class=&quot;...CustomEditorConfigurer&quot;&gt;
+    &lt;property name=&quot;customEditors&quot;&gt;
+        &lt;map&gt;
+            &lt;entry key=&quot;java.util.Date&quot;&gt; &lt;!-- key 是对象类型 --&gt;
+                &lt;ref bean=&quot;customPropertyEditor&quot; /&gt;
+            &lt;/entry&gt;
+        &lt;/map&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<pre><code class="xml">&lt;bean id=&quot;customPropertyEditor&quot; class=&quot;...CustomPropertyEditor&quot;&gt;
+    &lt;!-- property --&gt;
+&lt;/bean&gt;
+
+&lt;bean id=&quot;customPropertyEditorRegistrar&quot; class=&quot;...CustomPropertyEditorRegistrar&quot;&gt;
+    &lt;property name=&quot;propertyEditor&quot;&gt;
+        &lt;ref bean=&quot;customPropertyEditor&quot; /&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean class=&quot;...CustomEditorConfigurer&quot;&gt;
+    &lt;property name=&quot;propertyEditorRegistrars&quot;&gt;
+        &lt;list&gt;
+            &lt;ref bean=&quot;customPropertyEditorRegistrar&quot; /&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<p><strong>在 BeanFactory 和 ApplicationContext 中应用 BeanFactoryPostProcessor</strong></p>
+<ul>
+<li>在 BeanFactory 中，我们需要用手动方式应用所有的 BeanFactoryPostProcessor</li>
+<li>ApplicationContext 能够自动识别配置文件中的 BeanFactoryPostProcessor，因此只需在 XML 配置文件中将 BeanFactoryPostProcessor 配置即可</li>
+</ul>
+<pre><code class="xml">&lt;context:property-placeholder location=&quot;&quot;/&gt;
+</code></pre>
+
+<h5 id="43-bean"><strong>4.3 Bean 实例化阶段</strong></h5>
+<p><em>(1) 实例化过程</em></p>
+<ul>
+<li>实例化 bean 对象</li>
+<li>设置对象属性</li>
+<li>检查 Aware 相关接口并设置相关依赖</li>
+<li>BeanPostProcessor 前置处理</li>
+<li>检查是否是 InitializingBean 以决定是否调用 afterPropertySet 方法</li>
+<li>检查是否配置有自定义的 init-method</li>
+<li>BeanPostProcessor 后置处理</li>
+<li>注册必要的 Destruction 相关回调接口</li>
+<li>使用中</li>
+<li>是否实现 DisposableBean 接口</li>
+<li>是否配置有自定义的 destroy-method 方法</li>
+</ul>
+<p><em>(2) Bean 的实例化</em></p>
+<ul>
+<li>容器内部采用 <code>策略模式</code> 来决定采用何种方式初始化 bean 实例</li>
+<li><code>InstantiationStrategy</code> 接口定义了实例化策略的抽象接口</li>
+<li><code>SimpleInstantiationStrategy</code> 实现了简单的对象实例化功能，可以通过 <code>反射</code> 来实例化对象，但不支持方法注入方式的对象实例化</li>
+<li><code>CglibSubClassingInstantiationStrategy</code> 继承了 SimpleInstantiationStrategy 的以反射方式实例化对象的功能，并且通过 <code>CGLIB 的动态字节码生成功能</code> 可以动态生成某个类的子类，进而满足了方法注入所需的对象实例化需求</li>
+<li>默认情况下，容器内部采用 CglibSubClassingInstantiationStrategy</li>
+<li>InstantiationStrategy <code>返回的不是构造完成的对象实例，而是 BeanWrapper 实例</code></li>
+<li>通过 BeanWrapper （Spring 提供 <code>BeanWrapperImpl</code> 实现） 实例设置对象属性</li>
+</ul>
+<p><em>(3) Aware 接口</em></p>
+<ul>
+<li>BeanNameAware</li>
+<li>BeanClassLoaderAware</li>
+<li>BeanFactoryAware</li>
+<li>ResourceLoaderAware</li>
+<li>ApplicationEventPublisherAware</li>
+<li>MessageSourceAware</li>
+<li>ApplicationContextAware</li>
+</ul>
+<blockquote>
+<p>Aware 接口主要用于注入依赖</p>
+</blockquote>
+<p><strong>(4) BeanPostProcessor</strong></p>
+<p><strong>BeanPostProcessor 使用场景</strong></p>
+<ul>
+<li>处理标记接口实现类</li>
+<li>为当前对象提供代理实现 （Spring AOP）</li>
+</ul>
+<p><strong>自定义 BeanPostProcessor</strong></p>
+<ul>
+<li>
+<p>标注实现类</p>
+<ul>
+<li>创建标记接口</li>
+<li>实现类实现该标记接口</li>
+</ul>
+</li>
+<li>
+<p>自定义一个 BeanPostProcessor 实现类，对符合条件的 bean 实例进行处理</p>
+</li>
+<li>将自定义的 BeanPostProcessor 注册到容器中</li>
+</ul>
+<p><em>(5) InitializingBean 和 init-method</em></p>
+<p><em>(6) DisposableBean 和 destroy-method</em></p>
+<p><strong>如何才能触发</strong></p>
+<ul>
+<li>对于 BeanFactory 来说，需要调用 <code>ConfigurableBeanFactory</code> 提供的 <code>destroySingletons()</code> 方法销毁容器中管理的所有 singleton 类型的对象实例</li>
+<li>对于 ApplicationContext 来说，<code>AbstractApplicaionContext</code> 提供了 <code>registerShutdownHook()</code> 方法</li>
+</ul>
+<h3 id="applicationcontext"><a name="user-content-applicationcontext" href="#applicationcontext" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>ApplicationContext</h3>
+<h4 id="1_2"><a name="user-content-1_2" href="#1_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 统一的资源加载</h4>
+<h5 id="11-resource"><a name="user-content-11-resource" href="#11-resource" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.1 Resource</h5>
+<ul>
+<li>ByteArrayResource</li>
+<li>ClassPathResource</li>
+<li>FileSystemResource</li>
+<li>UrlResource</li>
+<li>InputStreamResource</li>
+</ul>
+<h5 id="12-resourceloader"><a name="user-content-12-resourceloader" href="#12-resourceloader" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.2 定位和查找资源的 ResourceLoader</h5>
+<p><strong>可用的 ResourceLoader</strong></p>
+<ul>
+<li>DefaultResourceLoader</li>
+<li>FileSystemResourceLoader</li>
+<li>ResourcePatternResolver<ul>
+<li>常用实现类 PathMatchingResourcePatternResolver</li>
+</ul>
+</li>
+</ul>
+<h5 id="13-applicationcontext-resourceloader"><a name="user-content-13-applicationcontext-resourceloader" href="#13-applicationcontext-resourceloader" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.3 ApplicationContext 与 ResourceLoader</h5>
+<ul>
+<li>
+<p>ApplicationContext 的实现类<code>完全可以支持</code> ResourceLoader 和 ResourcePatternResolver 接口，其功能<code>完全委派</code>给 DefaultResourceLoader 和 PathMatchingResourcePatternResolver</p>
+</li>
+<li>
+<p>可以通过实现 ResourceLoaderAware 接口注入 ResourceLoader 的依赖</p>
+</li>
+<li>
+<p>ApplicationContext 容器可以正确识别 Resource 类型并转换后注入相关对象</p>
+</li>
+</ul>
+<p><strong>实现原理</strong></p>
+<blockquote>
+<p>ApplicationContext 在启动的时候，会通过 <code>ResourceEditorRegistrar</code> 来注册 Spring 提供的针对 Resource 类型的 PropertyEditor （ResourceEditor） 实现到容器中</p>
+</blockquote>
+<h4 id="2_2"><a name="user-content-2_2" href="#2_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 国际化信息支持</h4>
+<h5 id="21-messagesource"><a name="user-content-21-messagesource" href="#21-messagesource" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.1 MessageSource</h5>
+<h4 id="3"><a name="user-content-3" href="#3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. 容器内部事件发布</h4>
+<h5 id="31-applicationevent"><a name="user-content-31-applicationevent" href="#31-applicationevent" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.1 ApplicationEvent</h5>
+<ul>
+<li>ContextClosedEvent：ApplicationContext 容器在即将关闭时发布的事件类型</li>
+<li>ContextRefreshEvent：ApplicationContext 容器在初始化或者刷新的时候发布的事件类型</li>
+<li>RequestHandledEvent：Web 请求处理后发出的事件类型</li>
+</ul>
+<h5 id="32-applicationlistener"><a name="user-content-32-applicationlistener" href="#32-applicationlistener" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.2 ApplicationListener</h5>
+<h5 id="33-applicationeventpublisher"><a name="user-content-33-applicationeventpublisher" href="#33-applicationeventpublisher" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.3 ApplicationEventPublisher</h5></article></body></html>

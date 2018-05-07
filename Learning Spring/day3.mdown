@@ -1,0 +1,99 @@
+## 针对特定对象类型的PropertyEditor实现
+
+- 直接实现PropertyEditor接口
+- 继承PropertyEditorSupport类
+- 通过CustomEditorConfigurer注册自定义的PropertyEditor
+
+```xml
+<bean class="...CustomEditorConfigurer">
+	<property name="customEditors">
+		<map>
+			<entry key="java.util.Date">
+				<ref bean="datePropertyEditor"/>
+			</entry>
+		</map>
+	</property>
+</bean>
+<bean id="datePropertyEditor" class="...DatePropertyEditor">
+	<property name="datePattern">
+		<value>yyyy/MM/dd</value>
+	</property>
+</bean>
+```
+
+> Spring 2.0后提倡使用CustomEditorConfigurer的propertyEditorRegistrars属性指定自定义的PropertyEditor
+> 需要先创建实现了PropertyEditorRegistrar接口的类，此类包含PropertyEditor的引用，类型与相应的PropertyEditor的绑定在此类中进行
+
+```xml
+<bean class="...CustomEditorConfigurer">
+	<property name="propertyEditorRegistrars">
+		<list>
+			<ref bean="datePropertyEditorRegistrar"/>
+		</list>
+	</property>
+</bean>
+<bean id="datePropertyEditorRegistrar" class="...DatePropertyEditorRegistrar">
+	<Property name="propertyEditor">
+		<ref bean="datePropertyEditor" />
+	</Property>
+</bean>
+<bean id="datePropertyEditor" class="...DatePropertyEditor">
+	<property name="datePattern">
+		<value>yyyy/MM/dd</value>
+	</property>
+</bean>
+```
+
+## bean的实例化阶段
+
+- BeanFactory.getBean的隐式调用
+	- BeanFactory在初始化一个Bean时，需要先初始化（getBean）其依赖且未初始化的Bean
+	- ApplicationContext启动之后会初始化所有的bean（getBean）
+
+- 只有当对应某个Bean的getBean()方法第一次被显式或隐式调用，Bean实例化阶段的活动才会触发
+
+## Bean的实例化与BeanWrapper
+
+- 采用策略模式来决定采用何种方式初始化bean实例，默认采用CglibSubclassingInstantiationStrategy，结合BeanDefinition返回BeanWrapper实例（Bean实例的包裹）
+- 设置对象属性，使用BeanWrapper对bean实例操作很方便，免去直接使用Java反射API操作对象的繁琐
+
+## 各色Aware接口
+
+> 在`Bean实例化`完成并且`相关属性以及依赖设置`完成以后，Spring会检查`当前对象实例`是否实现了一系列以`Aware`命名结尾的接口定义
+> 如果是，则将这些Aware接口定义中规定的依赖注入给当前对象实例
+
+> 相当于给Bean实例对象注入各种新的依赖
+
+- BeanNameAware：注入当前bean的beanName
+- BeanClassLoaderAware：注入加载当前bean的ClassLoader
+- BeanFactoryAware：注入容器自身
+
+> 以上Aware接口只是针对BeanFactory类型的容器
+
+> ApplicationContext容器还会进一步检查如下Aware接口
+
+- ResourceLoaderAware：ApplicationContext自身实现了ResourceLoader接口，所以会将自身注入
+- ApplicationEventPublisherAware：ApplicationContext自身实现了ApplicationEventPublisher接口，所以会将自身注入
+- MessageSourceAware：ApplicationContext自身实现了MessageSource接口，所以会将自身注入
+- ApplicationContextAware：注入自身
+
+## BeanPostProcessor
+
+> 注意区分BeanFactoryPostProcessor（对象的启动阶段），BeanPostProcessor是对象的实例化阶段
+
+- 前置处理
+- 后置处理
+
+> 使用场景：`处理标记接口类`，或者`为当前对象提供代理实现`
+
+- ApplicationContext对应的那些Aware接口实际上就是通过BeanPostProcessor的方式进行处理（处理标记类）
+
+> ApplicationContext中每个对象实例化走到BeanPostProcessor前置处理这一步时，ApplicationContext会检测到之前注册到容器中的ApplicationContextAwareProcessor这个实现类，然后调用beanProcessBeforeInitialization()方法，检查并设置Aware相关依赖
+
+- Spring AOP 利用BeanPostProcessor来为对象生成相应的代理对象
+
+## 自定以BeanPostPorcessor
+
+- 标注类
+- 实现相应的BeanPostProcessor类对符合条件的Bean进行处理
+- 将自定以的BeanPostProcessor注册到容器中
