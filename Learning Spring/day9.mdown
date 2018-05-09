@@ -1,0 +1,29 @@
+
+Front Controller (DispacherServlet)
+
+	---->	Page Controller
+	---->	Page Controller (Controller)
+	---->	Page Controller
+
+__DispacherServlet的处理流程：__
+
+_1. HandlerMapping_（Web请求的处理协调人）
+
+DispatcherServlet需要处理所有的Web请求，那么它只能自己处理`具体的Web请求`和`具体的处理类`之间的`映射关系匹配`
+
+处理方式有一下几种：
+
+A. 掐头去尾处理方式：将Web请求的URL路径去除前面的上下文路径（context path）和最后的扩展名
+
+B. 以Web请求的URL中存在的某个参数的值作为匹配的标准
+
+C. 以cookie或者session中的某些信息作为匹配标准
+
+匹配的方式是多种多样的，随着需求的变化而变化，如果写死在DispatcherServlet中，是无法有效扩展的
+
+Spring MVC为了能够灵活地处理映射的匹配，引入了`org.springframework.web.servlet.HandlerMapping`来专门管理Web请求到具体的处理类之间的映射关系
+
+DispatcherServlet ---> Concrete HandlerMapping ---> Concrete Controller
+
+
+_2. org.springframework.Web.servlet.Controller_ (Web 请求的具体处理者)
