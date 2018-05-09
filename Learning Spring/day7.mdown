@@ -1,0 +1,195 @@
+### 跟踪Spring MVC的请求
+
+- 第一站到达Spring的DispatcherServlet，它是一种前端控制器，它的任务是将请求发送给Spring MVC控制器（Controller）。
+
+- 一个应用程序可能含有多个控制器，DispatcherServlet会查询一个或多个处理器映射（handler mapping）来确定发给哪个控制器
+
+- 控制器在处理完请求后，通常会产生一些信息，这些信息需要返回给用户并在浏览器上显示，这些信息被称为模型（model）
+
+- 控制器将模型与视图名发送会DispatcherServlet
+
+- DispatcherServlet使用视图解析器（view resolver）获得视图
+
+- 将模型数据交付给视图，视图将使用模型数据渲染输出
+
+### 配置Spring MVC
+
+- 扩展`AbstractAnnotationConfigDispatcherServletInitializer`的任意类都会自动配置DispatcherServlet和Spring ApplicationContext。
+
+- 
+
+
+## 在 Spring 中配置 Web Flow
+
+### 装配流程执行器
+
+```xml
+<flow:flow-executor id="flowExecutor">
+```
+
+以上元素会创建一个流程执行器，流行执行器负责创建和执行流程，但它并不负责加载流程定义
+
+
+### 配置流程注册表
+
+流程注册表的工作是加载流程定义并让流程执行器能够使用它们。
+
+```xml
+<flow:flow-registry id="flowRegistry" base-path="/WEB-INF/flows">
+	<flow:flow-location-pattern value="-flow.xml" />
+</flow:flow-registry>
+```
+
+or
+
+```xml
+<flow:flow-registry id="flowRegistry">
+	<flow:flow-location id="pizza" value="/WEB-INF/flows/springpizza.xml" />
+</flow:flow-registry>
+```
+
+在 base-path 目录下查找流程定义，任何匹配 flow-location-pattern （以 -flow.xml 结尾的 XML 文件） 的文件都将被视为流程定义
+
+### 流程处理请求
+
+我们需要一个 FlowHandlerMapping 来帮助 DispatcherServlet 将流程请求发送给 Spring Web Flow
+
+```xml
+<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+	<property name="flowRegistry" ref="flowRegistry" />
+</bean>
+```
+
+FlowHandlerMapping 的工作仅仅是将流程请求定向到 Spring Web Flow 上，响应请求的是 FlowHandlerAdapter，等同于 Spring MVC 的控制器
+
+```xml
+<bean class="org.springframework.webflow.mvn.servlet.FlowHandlerAdapter">
+	<property name="flowExecutor" ref="flowExecutor" />
+</bean>
+```
+
+## 流程的组件
+
+### 状态
+
+- 行为：行为状态是流程逻辑发生的地方
+
+- 决策：决策状态将流程分为两个方向，它会基于流程数据的评估结果确定流程的方向
+
+- 结束：结束状态是流程的最后一站。一旦进入结束状态，流程就会终止
+
+- 子流程：子流程状态会在当前正在运行的流程上下文中启动一个新的流程
+
+- 视图：视图状态会暂停流程并邀请用户参与流程
+
+#### 视图状态
+
+```xml
+<view-state id="welcome" view="greeting" model="flowScope.paymentDetails" />
+```
+
+#### 行为状态
+
+```xml
+<action-state id="saveOrder">
+	<evaluate expression="pizzaFlowActions.saveOrder(order)" />
+	<transition to="thankYou" />
+</action-state>
+```
+
+<evaluate> 元素给出了行为状态要做的事情，expression 属性指定了进入这个状态要评估的表达式，表明找到 ID 为 pizzaFlowActions 的 bean，并调用其 saveOrder 方法
+
+#### 决策状态
+
+```xml
+<decision-state id="checkDeliveryArea">
+	<if test="pizzaFlowActions.checkDeliveryArea(customer.zipcode)" then="addCustomer" else="deliveryWarning" />
+</decision-state>
+```
+
+#### 子流程状态
+
+```xml
+<subflow-state id="order" subflow="pizza/order">
+	<input name="order" value="order" />
+	<transition on="orderCreated" to="payment" />
+</subflow-state>
+```
+
+<input> 元素用于传递订单对象作为子流程的输入。如果子流程结束的 <end-state> 状态 ID 为 orderCreated，那么流程将会转移到名为 payment 的状态
+
+#### 结束状态
+
+<end-state id="customerReady" />
+
+当达到 <end-state> 状态，流程会结束。接下来会发生什么取决于几个因素
+
+- 如果结束流程是个子流程，那调用它的流程会从 <subflow-state> 处继续执行。<end-state> 的 ID 将会用作事件触发从 <subflow-state> 开始的转移
+
+- 如果 <end-state> 设置了 view 属性，指定了视图将会被渲染。
+
+- 如果结束的流程不是子流程也没有 view 属性，那么流程只是结束而已
+
+### 转移
+
+```xml
+<transition on="phoneEntered" to="customerReady" />
+```
+
+<transition> 会作为 <action-state>，<view-state>，<subflow-state> 的子元素
+
+on 指定触发转移的事件
+
+on-exception 触发转移的是抛出异常
+
+to 指定流程的下一个状态
+
+#### 全局转移
+
+与其在多个状态中都重复通用的转移，我们可以将 <transition> 元素作为 <global-transitioins> 的子元素，把他们定义为全局转移
+
+```xml
+<global-transitions>
+	<transition on="cancel" to="endState" />
+</global-transitions>
+```
+
+### 流程数据
+
+#### 声明变量
+
+```xml
+<var name="customer" class="com.springinaction.pizza.domain.Customer" />
+```
+
+创建一个新的 Customer 实例并将其放在名为 customer 的变量中。这个变量可以在流程的任意状态进行访问
+
+```xml
+<evaluate result="viewScope.toppingsList" expression="T{com.springinaction.pizza.domain.Topping}.asList()" />
+```
+
+<evaluate> 元素计算了一个表达式，并将结果放到名为 toppingList 的变量中，这个变量是视图作用域的
+
+```xml
+<set name="flowScope.pizza" value="new com.springinaction.pizza.domain.Pizza()" />
+```
+
+#### 定义流程数据的作用域
+
+- Conversation：最高层级的流程开始时创建，在最高流程的流程结束时销毁。被最高层级的流程和其所有子流程所共享
+
+- Flow：当流程开始时创建，在流程结束时销毁。只有在创建它的流程中是可见的
+
+- Request：当一个请求进入流程时创建，在流程返回时销毁
+
+- Flash：当流程开始时创建，在流程结束时销毁，视图状态渲染后，它也会被清除
+
+- View：当进入视图状态时创建，当这个状态退出时销毁。只在视图状态内可见
+
+
+<var> 创建的始终是 Flow 作用域的变量，也就是在定义变量的流程内有效
+
+<set> 和 <evaluate> 作用域通过 name 或着 result 属性的前缀指定
+
+## 组合起来：披萨流程
+

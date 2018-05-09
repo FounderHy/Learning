@@ -1,0 +1,32 @@
+### 编写简单的安全性配置
+
+```java
+@Configuratoin
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+}
+```
+
+如果应用是 Spring MVC 开发，则考虑使用 @EnableWebMvcSecurity
+
+@EnableWebMvcSecurity 注解还配置了一个 Spring MVC 参数解析器，这样的话处理器方法就能够通过带有 @AuthenticationPrincipal 注解的参数获取认证用户的 principal
+
+它同时还配置了一个 bean，在使用 Spring 绑定标签库来定义表单时，这个 bean 会自动添加一个隐藏的跨站请求伪造（CSRF）token输入域
+
+#### 重载 WebSecurityConfigurerAdapter 的 configure() 方法
+
+- configure(WebSecurity)：配置 Spring Security 的 Filter 链
+
+- configure(HttpSecurity)：配置如何通过拦截器保护请求
+
+- configure(AuthenticationManangerBuilder)：配置 user-detail 服务
+
+
+添加一些配置
+
+- 配置用户存储
+
+- 指定哪些请求需要认证，哪些请求不需要认证，以及所需要的权限
+
+- 提供一个自定义的登录界面，替换原来简单的默认登录页
