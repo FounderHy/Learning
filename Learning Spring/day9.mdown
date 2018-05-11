@@ -21,9 +21,84 @@ C. 以cookie或者session中的某些信息作为匹配标准
 
 匹配的方式是多种多样的，随着需求的变化而变化，如果写死在DispatcherServlet中，是无法有效扩展的
 
-Spring MVC为了能够灵活地处理映射的匹配，引入了`org.springframework.web.servlet.HandlerMapping`来专门管理Web请求到具体的处理类之间的映射关系
+Spring MVC为了能够灵活地处理映射的匹配，引入了`org.springframework.Web.servlet.HandlerMapping`来专门管理Web请求到具体的处理类之间的映射关系
 
-DispatcherServlet ---> Concrete HandlerMapping ---> Concrete Controller
+DispatcherServlet ---> Concrete HandlerMapping ---> Concrete Controller ---> Model and View (逻辑视图名称) ---> Concrete ViewResolver ---> Concrete View ---> HttpServletResponse
 
 
 _2. org.springframework.Web.servlet.Controller_ (Web 请求的具体处理者)
+
+DispatcherServlet的次级控制器，处理具体的Web请求，处理完毕后，返回一个`org.springframework.Web.servlet.ModelAndView`实例，ModelAndView实例包含如下两个信息
+
+A. 视图的逻辑名称（或者具体的视图实例）。DispatcherServlet根据该视图的逻辑名称，来决定为用户显示哪个视图
+
+B. 模型数据。视图渲染过程中需要将这些模型数据并入视图的显示中
+
+
+_3. ViewResolver和View_（视图独立战争的领导者）
+
+A. 获取模型数据
+
+B. 获取视图模板文件
+
+C. 结合视图模板和模型数据，使用相应的视图技术API生成最终的视图结果
+
+D. 将视图结果通过HttpServletResponse输出到客户端
+
+E. 完成
+
+视图模板与模型数据的合并逻辑，以及合并后的视图结果的输出逻辑，全部封装到相应的View实现类中。
+
+ViewResolver就是帮助DispacherServlet处理`逻辑视图名称`和`具体View实例`之间的映射关系
+
+
+__Spring MVC应用的物理结构__
+
+_1. ContextLoaderListener与/WEB-INF/applicationContext.xml_
+
+从web.xml开始，首先通过<listener>元素增加了一个ServletContextListener的定义，即org.springframework.Web.context.ContextLoaderListener。
+
+ContextLoaderListener的职责在于为整个Web应用程序加载顶层的WebApplicationContext
+
+ContextLoaderListener加载的WebApplicationContext的默认配置文件路径为/WEB-INF/applicationContext.xml
+
+在web.xml中添加自定义的WebApplicationContext配置文件路径：
+
+```xml
+<listener>
+	<listen-class>org.springframework.Web.context.ContextLoaderListener</listen-class>
+</listener>
+<context-param>
+	<param-name>contextConfigLocation</param-name>
+	<param-value>/WEB-INF/applicationContext.xml, /WEB-INF/applicationContext-module.xml</param-value>
+</context-param>
+```
+
+_2. DispatcherServlet与XXX-servlet.xml_
+
+DispatcherServlet需要使用一个外部化的配置文件，用来配置Spring MVC框架在处理Web请求过程中所涉及的各个组件，包括HandlerMapping的定义，Controller的定义，ViewResolver的定义。
+
+该外部化的配置文件存在的默认路径也是/WEB-INF/，名称需要参照web.xml中定义的DispatcherServlet的<servlet-name>来决定，例如我们当前定义的DispacherServlet的<servlet-name>为controller，那么默认的配置文件即对应/WEB-INF/controller-servlet.xml
+
+在web.xml中添加自定义的外部化配置文件路径：
+
+```xml
+<servlet>
+	<servlet-name>learningspringmvc</servlet-name>
+	<servlet-class>
+		org.springframework.web.servlet.DispatcherServlet
+	</servlet-class>
+	<!-- DispatcherServlet需要外部化的配置文件，用来配置Spring MVC框架在处理Web请求过程中设计的各个组件HanlderMapping,Controller,ViewResolver等 -->
+	<!-- 默认的配置文件路径是'/WEB-INF/<servlet-name>-servlet.xml' -->
+	<!-- 也可以通过如下方式配置自定义的配置文件路径 -->
+	<init-param>
+		<param-name>contextConfigLocatin</param-name>
+		<param-value>/WEB-INF/learningspringmvc-servlet.xml</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+```
+
+__忙碌的协调人HandlerMapping__
+
+可用的HandlerMapping
