@@ -99,6 +99,29 @@ DispatcherServlet需要使用一个外部化的配置文件，用来配置Spring
 </servlet>
 ```
 
-__忙碌的协调人HandlerMapping__
+__MultipartResolver__
 
-可用的HandlerMapping
+位于 HandlerMapping 之前，是服务器端处理文件上传的主要组件
+
+
+
+__HandlerInterceptor__
+
+对处理流程进行拦截
+
+拦截位置有三种：
+
+
+__HandlerAdapter__
+
+帮助我们使用其他类型的Handler
+
+
+__LocaleResolver__
+
+根据用户的Locale显示不同的视图
+
+
+__ThemeResolver__
+
+用户可以选择不同的主题
